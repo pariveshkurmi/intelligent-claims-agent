@@ -38,6 +38,16 @@ services:
     environment:
       PHOENIX_PORT: 6006
       PHOENIX_HOST: 0.0.0.0
+      PHOENIX_ENABLE_AUTH: "false"
+
+  adminer:
+    image: adminer:latest
+    container_name: claims-adminer
+    restart: unless-stopped
+    ports:
+      - "5050:8080"   # Database Web Browser UI
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
 
 volumes:
   postgres_data:
