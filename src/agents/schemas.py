@@ -89,3 +89,21 @@ class SLACommsResult(BaseModel):
     documents_requested: bool = False
     details: Dict[str, Any] = Field(default_factory=dict)
 
+
+class Route(BaseModel):
+    """Supervisor dynamic routing decision schema."""
+    next: Literal[
+        "intake_agent",
+        "document_fanout",
+        "summary_agent",
+        "routing_agent",
+        "sla_agent",
+        "human_review",
+        "await_documents",
+        "manual_review",
+        "finalize",
+        "end",
+    ] = Field(description="Next specialist agent node or destination in workflow")
+    reason: str = Field(description="Operational rationale for selecting the next step")
+
+

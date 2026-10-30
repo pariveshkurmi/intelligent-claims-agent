@@ -16,6 +16,7 @@ from src.agents.schemas import (
     RoutingResult,
     IntakeResult,
     SLACommsResult,
+    Route,
 )
 
 load_dotenv()
@@ -75,11 +76,14 @@ class MockStructuredRunnable(Runnable):
             pol_match = re.search(r"\b(POL-[A-Z0-9-]+)\b", doc_body)
             pol = pol_match.group(1) if pol_match else None
             
-            doc_type = "claim_form"
-            if "itemized" in doc_lower or "hospital - itemized bill" in doc_lower:
+            if "claim form" in doc_lower or "claim_form" in doc_lower:
+                doc_type = "claim_form"
+            elif "itemized" in doc_lower or "itemized bill" in doc_lower or "hospital invoice" in doc_lower:
                 doc_type = "itemized_bill"
             elif "clinical" in doc_lower or "medical record" in doc_lower:
                 doc_type = "medical_record"
+            else:
+                doc_type = "other"
                 
             confidence = 0.42 if is_low_conf else (0.95 if not is_injection else 0.88)
             status = "SUSPECTED_INJECTION" if is_injection else ("LOW_CONFIDENCE" if is_low_conf else "VALID")
@@ -170,7 +174,50 @@ class MockStructuredRunnable(Runnable):
                 status="ROUTED_FOR_APPROVAL",
             )
 
-        # 4. Fallback for any other BaseModel
+        # 4. Route Schema
+        elif self.schema == Route or getattr(self.schema, "__name__", "") == "Route":
+            if any(k in text_lower for k in ("manual_review", "low_confidence", "poor_scan", "injection", "adversarial", "unreadable")):
+                return Route(
+                    next="manual_review",
+                    reason="Low confidence scan, security prompt injection, or severe exception detected.",
+                )
+            elif any(k in text_lower for k in ("missing", "docs_pending", "await_documents")):
+                return Route(
+                    next="await_documents",
+                    reason="Required documentation is missing from the file. Pausing to request from claimant.",
+                )
+            elif any(k in text_lower for k in ("summary", "validated")):
+                return Route(
+                    next="summary_agent",
+                    reason="Documents validated. Ready for clinical and policy synthesis.",
+                )
+            elif "routing" in text_lower:
+                return Route(
+                    next="routing_agent",
+                    reason="Summary generated. Matching adjuster workload and approver tier.",
+                )
+            elif "sla" in text_lower:
+                return Route(
+                    next="sla_agent",
+                    reason="Case routed. Scheduling SLA deadline and notifying approver.",
+                )
+            elif any(k in text_lower for k in ("human_review", "ready_for_approval")):
+                return Route(
+                    next="human_review",
+                    reason="SLA configured and notification sent. Pausing for human approver decision.",
+                )
+            elif any(k in text_lower for k in ("finalize", "approved", "rejected")):
+                return Route(
+                    next="finalize",
+                    reason="Human decision recorded. Finalizing claim in case records.",
+                )
+            else:
+                return Route(
+                    next="manual_review",
+                    reason="Non-standard path; routing to manual review investigator.",
+                )
+
+        # 5. Fallback for any other BaseModel
         return self.schema.model_validate({})
 
 
