@@ -14,6 +14,7 @@ data/postgres_data/
 
 # Environment files
 .env
+.env*.local
 
 # Testing & Cache
 .pytest_cache/
@@ -22,3 +23,10 @@ htmlcov/
 
 # Logs
 *.log
+
+# Editor & IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store

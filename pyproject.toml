@@ -17,6 +17,11 @@ dependencies = [
     "pytest>=8.0.0",
     "fastapi>=0.115.0",
     "uvicorn>=0.32.0",
+    "langchain>=1.4.7",
+    "langchain-core>=1.7.3",
+    "langgraph>=1.2.18",
+    "langchain-google-genai>=4.4.2",
+    "langchain-mcp-adapters>=0.3.2",
 ]
 
 [build-system]
