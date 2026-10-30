@@ -13,7 +13,7 @@ from src.agents.specialists import (
     SLAAgent,
 )
 from src.db.connection import execute_mutation, execute_query
-from src.graph.state import ClaimState, DocumentWorkerInput
+from src.orchestration.state import ClaimState, DocumentWorkerInput
 from src.mcp_servers.case_mcp import register_case
 from src.mcp_servers.documents_mcp import validate_case_documents, extract_text, list_documents
 from src.mcp_servers.workflow_mcp import get_workload, _send_email_via_mailpit

@@ -1,7 +1,7 @@
 """Deterministic guardrails and state transition validation for claims graph."""
 
 from typing import Any, Dict, List, Optional, Tuple
-from src.graph.state import ClaimState
+from src.orchestration.state import ClaimState
 
 
 class GuardrailViolationError(Exception):

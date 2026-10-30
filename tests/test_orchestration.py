@@ -7,15 +7,15 @@ from langgraph.checkpoint.postgres import PostgresSaver
 from langgraph.types import Command
 
 from src.db.connection import DATABASE_URL, execute_mutation
-from src.graph.builder import build_claims_graph
-from src.graph.guardrails import (
+from src.orchestration.builder import build_claims_graph
+from src.orchestration.guardrails import (
     GuardrailViolationError,
     check_failsafe_conditions,
     guard_transition,
     validate_transition,
 )
-from src.graph.state import ClaimState, Route
-from src.graph.supervisor import SupervisorNode
+from src.orchestration.state import ClaimState, Route
+from src.orchestration.supervisor import SupervisorNode
 
 
 @pytest.fixture(autouse=True)

@@ -9,7 +9,7 @@ from langgraph.checkpoint.postgres import PostgresSaver
 from langgraph.types import Command
 
 from src.db.connection import DATABASE_URL, execute_mutation, execute_query
-from src.graph.builder import build_claims_graph
+from src.orchestration.builder import build_claims_graph
 
 
 def get_postgres_graph():

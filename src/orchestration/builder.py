@@ -7,8 +7,8 @@ from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.checkpoint.postgres import PostgresSaver
 
 from src.db.connection import DATABASE_URL
-from src.graph.guardrails import guard_transition, check_failsafe_conditions
-from src.graph.nodes import (
+from src.orchestration.guardrails import guard_transition, check_failsafe_conditions
+from src.orchestration.nodes import (
     intake_node,
     document_worker_node,
     document_join_node,
@@ -20,7 +20,7 @@ from src.graph.nodes import (
     manual_review_node,
     finalize_node,
 )
-from src.graph.state import ClaimState
+from src.orchestration.state import ClaimState
 from src.mcp_servers.documents_mcp import list_documents
 
 
