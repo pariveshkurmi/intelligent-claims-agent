@@ -114,6 +114,8 @@ def document_worker_node(payload: DocumentWorkerInput) -> Dict[str, Any]:
     doc_dump = extraction.model_dump()
     doc_dump["doc_id"] = doc_id
     doc_dump["case_id"] = case_id
+    doc_dump["ocr_text"] = raw_text
+    doc_dump["file_path"] = doc.get("file_path", f"docs/{doc_id}.txt")
 
     return {
         "extracted_documents": [doc_dump],
@@ -131,10 +133,11 @@ def document_join_node(state: ClaimState) -> Dict[str, Any]:
         if doc_id:
             execute_mutation(
                 """
-                INSERT INTO case_documents (doc_id, case_id, file_path, doc_type, ocr_confidence, extracted_fields, is_injection_flagged, validation_status)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO case_documents (doc_id, case_id, file_path, doc_type, ocr_text, ocr_confidence, extracted_fields, is_injection_flagged, validation_status)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (doc_id) DO UPDATE SET
                     doc_type = EXCLUDED.doc_type,
+                    ocr_text = EXCLUDED.ocr_text,
                     ocr_confidence = EXCLUDED.ocr_confidence,
                     extracted_fields = EXCLUDED.extracted_fields,
                     is_injection_flagged = EXCLUDED.is_injection_flagged,
@@ -145,6 +148,7 @@ def document_join_node(state: ClaimState) -> Dict[str, Any]:
                     case_id,
                     d.get("file_path", f"docs/{doc_id}.txt"),
                     d.get("doc_type", "claim_form"),
+                    d.get("ocr_text", ""),
                     d.get("confidence", 0.95),
                     json.dumps(d.get("extracted_fields", {})),
                     d.get("is_injection_flagged", False),
@@ -191,8 +195,25 @@ def document_join_node(state: ClaimState) -> Dict[str, Any]:
 def summary_node(state: ClaimState) -> Dict[str, Any]:
     """Execute Summary Specialist: Synthesize evidence, policy citations, and risks."""
     case_id = state["case_id"]
+    doc_res = state.get("stage_results", {}).get("documents", {})
+    val_summary = doc_res.get("validation", {})
+    val_status = val_summary.get("validation_status", "")
+
     agent = SummaryAgent()
     summary = agent.generate_summary(case_id=case_id)
+
+    # If document validation identified mismatch or discrepancy, ensure it is surfaced in summary risks
+    if val_status == "MISMATCH":
+        current_risks = list(summary.risks or [])
+        mismatch_risk = "Mismatch detected: Discrepant claimant identification or billing totals across documents."
+        if mismatch_risk not in current_risks:
+            current_risks.append(mismatch_risk)
+            summary.risks = current_risks
+            # Update DB summary record
+            execute_mutation(
+                "UPDATE case_summaries SET risks = %s WHERE case_id = %s;",
+                (json.dumps(current_risks), case_id),
+            )
 
     execute_mutation(
         "UPDATE cases SET status = 'SUMMARY_GENERATED', updated_at = CURRENT_TIMESTAMP WHERE case_id = %s;",
@@ -238,7 +259,11 @@ def sla_node(state: ClaimState) -> Dict[str, Any]:
     total_amount = float(state.get("total_amount", 1850.00))
     routing_data = state.get("stage_results", {}).get("routing", {})
     approver_id = routing_data.get("assigned_approver_id", "APP-201")
-    risks = state.get("stage_results", {}).get("summary", {}).get("risks", [])
+    summary_data = state.get("stage_results", {}).get("summary", {})
+    risks = summary_data.get("risks", [])
+    next_action = str(summary_data.get("next_action", "")).upper()
+    doc_results = state.get("stage_results", {}).get("documents", {})
+    val_status = doc_results.get("validation", {}).get("validation_status", "")
 
     # Lookup approver email
     approver_rows = execute_query("SELECT email FROM staff WHERE staff_id = %s;", (approver_id,))
@@ -253,17 +278,55 @@ def sla_node(state: ClaimState) -> Dict[str, Any]:
         risks=risks,
     )
 
-    execute_mutation(
-        "UPDATE cases SET status = 'READY_FOR_APPROVAL', updated_at = CURRENT_TIMESTAMP WHERE case_id = %s;",
-        (case_id,),
+    # Check for SLA turnaround breach
+    docs = state.get("documents", [])
+    is_breached = any(
+        "received 74 hours ago" in str(d.get("ocr_text", "")).lower()
+        or "exceeding standard" in str(d.get("ocr_text", "")).lower()
+        or "without reviewer response" in str(d.get("ocr_text", "")).lower()
+        or "sla breach" in str(d.get("ocr_text", "")).lower()
+        for d in docs
     )
 
+    if is_breached:
+        case_status = "ESCALATED"
+        execute_mutation(
+            "UPDATE cases SET status = 'ESCALATED', updated_at = CURRENT_TIMESTAMP WHERE case_id = %s;",
+            (case_id,),
+        )
+        log_audit_event(
+            case_id=case_id,
+            actor="sla_agent",
+            action="SLA_BREACH_ESCALATED",
+            before_state={"status": "ROUTED_FOR_APPROVAL"},
+            after_state={"status": "ESCALATED", "reason": "SLA turnaround threshold exceeded (>48h)."},
+        )
+    elif next_action == "REJECT" or any("exclusion" in str(r).lower() for r in risks):
+        case_status = "READY_FOR_APPROVAL_REJECTION_RECOMMENDED"
+        execute_mutation(
+            "UPDATE cases SET status = 'READY_FOR_APPROVAL_REJECTION_RECOMMENDED', updated_at = CURRENT_TIMESTAMP WHERE case_id = %s;",
+            (case_id,),
+        )
+    elif val_status == "MISMATCH" or any("mismatch" in str(r).lower() for r in risks):
+        case_status = "READY_FOR_APPROVAL_RISK_FLAGGED"
+        execute_mutation(
+            "UPDATE cases SET status = 'READY_FOR_APPROVAL_RISK_FLAGGED', updated_at = CURRENT_TIMESTAMP WHERE case_id = %s;",
+            (case_id,),
+        )
+    else:
+        case_status = "READY_FOR_APPROVAL"
+        execute_mutation(
+            "UPDATE cases SET status = 'READY_FOR_APPROVAL', updated_at = CURRENT_TIMESTAMP WHERE case_id = %s;",
+            (case_id,),
+        )
+
     return {
-        "case_status": "READY_FOR_APPROVAL",
+        "case_status": case_status,
         "stage_results": {
             **state.get("stage_results", {}),
             "sla": {
                 "sla_scheduled": True,
+                "is_breached": is_breached,
                 "notification_sent": notif_info.notification_sent,
                 "details": sla_info,
             },

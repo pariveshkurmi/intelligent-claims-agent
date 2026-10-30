@@ -9,6 +9,7 @@ from src.agents.middleware import PIIMiddleware, ToolCallLimitMiddleware, ToolRe
 from src.agents.schemas import DocumentExtractionResult
 from src.agents.tool_loader import get_document_tools
 from src.db.connection import execute_mutation
+from src.mcp_servers.documents_mcp import classify_document
 
 
 def _is_valid_uuid(val: str) -> bool:
@@ -77,6 +78,11 @@ class DocumentAgent:
         if ocr_confidence < 0.50:
             extraction.confidence = min(extraction.confidence, ocr_confidence)
             extraction.validation_status = "LOW_CONFIDENCE"
+
+        # Standardize classification taxonomy with deterministic fallback
+        cls_info = classify_document(case_id, doc_id, text=raw_text)
+        if cls_info.get("doc_type") and cls_info.get("doc_type") != "other":
+            extraction.doc_type = cls_info["doc_type"]
 
         # 3. Synchronize extracted state back to PostgreSQL if valid UUID doc_id exists
         if _is_valid_uuid(doc_id):

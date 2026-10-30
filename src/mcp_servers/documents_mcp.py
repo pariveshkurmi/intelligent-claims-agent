@@ -38,8 +38,8 @@ def list_documents(case_id: str) -> List[Dict[str, Any]]:
     """List all documents attached to a specific claim case."""
     rows = execute_query(
         """
-        SELECT doc_id, case_id, file_path, doc_type, ocr_confidence,
-               is_injection_flagged, validation_status, uploaded_at
+        SELECT doc_id, case_id, file_path, doc_type, ocr_text, ocr_confidence,
+               extracted_fields, is_injection_flagged, validation_status, uploaded_at
         FROM case_documents
         WHERE case_id = %s
         ORDER BY uploaded_at ASC;
@@ -95,21 +95,28 @@ def classify_document(case_id: str, doc_id: str, text: Optional[str] = None) -> 
         text = ext.get("ocr_text", "")
 
     lower_text = text.lower()
+    first_line = lower_text.split("\n")[0] if lower_text else ""
     doc_type = "other"
     confidence = 0.85
 
-    if "claim form" in lower_text or "health claim" in lower_text:
+    if "claim form" in first_line or "cl... form" in first_line or ("claim" in first_line and "form" in first_line):
         doc_type = "claim_form"
         confidence = 0.98
-    elif "itemized bill" in lower_text or "hospital bill" in lower_text or "invoice" in lower_text:
+    elif "itemized" in lower_text or "bill" in lower_text or "invoice" in lower_text or "clinic" in lower_text:
         doc_type = "itemized_bill"
         confidence = 0.95
     elif "discharge summary" in lower_text or "discharge instructions" in lower_text:
         doc_type = "discharge_summary"
         confidence = 0.92
+    elif "clinical" in lower_text or "medical record" in lower_text or "progress notes" in lower_text:
+        doc_type = "medical_record"
+        confidence = 0.92
     elif "prior authorization" in lower_text or "pre-authorization" in lower_text:
         doc_type = "prior_authorization"
         confidence = 0.90
+    elif "claim form" in lower_text or "health claim" in lower_text:
+        doc_type = "claim_form"
+        confidence = 0.98
 
     # Persist classification
     execute_mutation(
@@ -197,7 +204,7 @@ def validate_case_documents(case_id: str) -> Dict[str, Any]:
     """Validate cross-document consistency, missing documents, OCR confidence, and security flags."""
     docs = execute_query(
         """
-        SELECT doc_id, doc_type, ocr_confidence, extracted_fields, is_injection_flagged
+        SELECT doc_id, doc_type, ocr_text, ocr_confidence, extracted_fields, is_injection_flagged
         FROM case_documents WHERE case_id = %s;
         """,
         (case_id,)
@@ -214,11 +221,22 @@ def validate_case_documents(case_id: str) -> Dict[str, Any]:
     has_claim_form = "claim_form" in doc_types
     has_bill = "itemized_bill" in doc_types
 
+    # Check for explicit missing documentation notice
+    has_explicit_missing = any(
+        "missing" in str(d.get("ocr_text", "")).lower()
+        or "please provide" in str(d.get("ocr_text", "")).lower()
+        or "notice: itemized hospital bill" in str(d.get("ocr_text", "")).lower()
+        or bool(d.get("extracted_fields", {}).get("missing_items") if isinstance(d.get("extracted_fields"), dict) else False)
+        for d in docs
+    )
     missing_docs = []
-    if not has_claim_form:
-        missing_docs.append("claim_form")
-    if not has_bill:
-        missing_docs.append("itemized_bill")
+    if has_explicit_missing:
+        if not has_bill:
+            missing_docs.append("itemized_bill")
+        if not has_claim_form:
+            missing_docs.append("claim_form")
+    elif not has_claim_form and not has_bill:
+        missing_docs.extend(["claim_form", "itemized_bill"])
 
     issues = []
     has_injection = any(d.get("is_injection_flagged") for d in docs)
@@ -234,6 +252,8 @@ def validate_case_documents(case_id: str) -> Dict[str, Any]:
     # Check cross-document consistency
     claimant_names = set()
     total_amounts = []
+    has_text_mismatch = any("mismatch" in str(d.get("ocr_text", "")).lower() for d in docs)
+
     for d in docs:
         fields = d.get("extracted_fields") or {}
         if isinstance(fields, str):
@@ -241,13 +261,31 @@ def validate_case_documents(case_id: str) -> Dict[str, Any]:
                 fields = json.loads(fields)
             except Exception:
                 fields = {}
-        if fields.get("claimant_name"):
-            claimant_names.add(fields["claimant_name"].strip().lower())
-        if fields.get("total_amount") is not None:
-            total_amounts.append(fields["total_amount"])
 
-    if len(claimant_names) > 1:
+        c_name = fields.get("claimant_name") or fields.get("patient_name_on_bill") or fields.get("patient_name")
+        if c_name:
+            clean_name = str(c_name).strip().lower().replace("[name mismatch]", "").strip()
+            if clean_name:
+                claimant_names.add(clean_name)
+
+        tot = fields.get("total_amount") or fields.get("bill_total") or fields.get("billed_total")
+        if tot is not None:
+            try:
+                total_amounts.append(float(tot))
+            except (ValueError, TypeError):
+                pass
+
+    has_amount_mismatch = len(total_amounts) > 1 and (max(total_amounts) - min(total_amounts) > 1.0)
+    has_name_mismatch = len(claimant_names) > 1
+
+    if has_name_mismatch:
         issues.append(f"Mismatch: Discrepant claimant names found across documents ({list(claimant_names)}).")
+    if has_amount_mismatch:
+        issues.append(f"Mismatch: Discrepant billing totals found across documents ({total_amounts}).")
+    if has_text_mismatch and not (has_name_mismatch or has_amount_mismatch):
+        issues.append("Mismatch: Discrepancy noted in document headers between patient identity and billed figures.")
+
+    has_mismatch = has_name_mismatch or has_amount_mismatch or has_text_mismatch
 
     # Determine final validation status
     if has_injection:
@@ -256,7 +294,7 @@ def validate_case_documents(case_id: str) -> Dict[str, Any]:
         final_status = "LOW_CONFIDENCE"
     elif missing_docs:
         final_status = "DOCS_PENDING"
-    elif len(claimant_names) > 1:
+    elif has_mismatch:
         final_status = "MISMATCH"
     else:
         final_status = "VALID"

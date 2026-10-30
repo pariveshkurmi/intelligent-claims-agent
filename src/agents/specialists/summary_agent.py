@@ -50,12 +50,16 @@ class SummaryAgent:
         mcp_prompt_template = load_case_summary_prompt(case_id)
 
         # 5. Build context payload and scrub PII
+        doc_summaries = []
+        for d in doc_list:
+            doc_summaries.append(f"Doc {d.get('doc_type')}: {str(d.get('extracted_fields', {}))} | Text: {str(d.get('ocr_text', ''))[:150]}")
         context_payload = (
             f"Case Context:\n"
             f"ID: {case_id}\n"
             f"Claimant: {case_info.get('claimant_name')}\n"
             f"Total Amount: ${case_info.get('total_amount', 0.0):,.2f}\n"
             f"Documents Count: {len(doc_list)}\n"
+            f"Documents Summary: {' ; '.join(doc_summaries)}\n"
             f"Retrieved Policy Clauses:\n"
             + "\n".join([f"- [{c.get('clause_id')}] {c.get('clause_text', '')[:200]}" for c in policy_clauses])
         )

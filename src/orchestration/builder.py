@@ -88,6 +88,15 @@ def route_from_routing(state: ClaimState) -> str:
     return guard_transition(state, "sla_agent")
 
 
+def route_from_sla(state: ClaimState) -> str:
+    """Evaluate routing following SLA scheduling: check for SLA breach escalation, else human review."""
+    stage_results = state.get("stage_results", {})
+    sla_res = stage_results.get("sla", {})
+    if sla_res.get("is_breached") or state.get("case_status") == "ESCALATED":
+        return "manual_review"
+    return "human_review"
+
+
 def route_from_human_review(state: ClaimState) -> str:
     """Evaluate routing following approver review: finalize, request info, or escalate."""
     decision_info = state.get("human_decision", {})
@@ -158,8 +167,12 @@ def build_claims_graph(checkpointer: Optional[BaseCheckpointSaver] = None) -> An
         ["sla_agent", "manual_review"],
     )
 
-    # SLA -> Human Review
-    workflow.add_edge("sla_agent", "human_review")
+    # SLA -> [human_review | manual_review]
+    workflow.add_conditional_edges(
+        "sla_agent",
+        route_from_sla,
+        ["human_review", "manual_review"],
+    )
 
     # Human Review -> [finalize | await_documents | manual_review]
     workflow.add_conditional_edges(
