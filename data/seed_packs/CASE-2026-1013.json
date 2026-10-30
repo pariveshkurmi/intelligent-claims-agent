@@ -1,0 +1,27 @@
+{
+  "case_id": "CASE-2026-1013",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Sarah Jenkins",
+  "scenario": "missing_docs",
+  "total_amount": 3776.5,
+  "notes": "Claim submitted without required itemized hospital bill.",
+  "documents": [
+    {
+      "doc_id": "7df79dc2-985f-4407-af52-898a8c062437",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.95,
+      "file_path": "data/seed_packs/CASE-2026-1013_claim_form.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "UHG CLAIM FORM\nClaimant: Sarah Jenkins\nAmount: $3776.50\nNotice: Itemized hospital bill and doctor referral missing.",
+      "extracted_fields": {
+        "claimant_name": "Sarah Jenkins",
+        "total_amount": 3776.5,
+        "missing_items": [
+          "itemized_bill",
+          "physician_referral"
+        ]
+      }
+    }
+  ],
+  "expected_outcome": "DOCS_PENDING"
+}

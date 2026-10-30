@@ -1,0 +1,41 @@
+{
+  "case_id": "CASE-2026-1002",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Michael Chang",
+  "scenario": "clean_claim",
+  "total_amount": 1975.5,
+  "notes": "Clean happy-path claim with complete supporting itemized bills.",
+  "documents": [
+    {
+      "doc_id": "b7829e7c-4174-42e0-8475-e3f5065c42fe",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.98,
+      "file_path": "data/seed_packs/CASE-2026-1002_claim_form.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "UNITEDHEALTHCARE HEALTH CLAIM FORM\nClaimant: Michael Chang\nPolicy: POL-UHG-001\nDiagnosis: Acute Appendectomy\nClaimed: $1975.50\nProvider: St. Mary General Hospital",
+      "extracted_fields": {
+        "claimant_name": "Michael Chang",
+        "policy_number": "POL-UHG-001",
+        "diagnosis": "Acute Appendicitis",
+        "procedure": "Laparoscopic Appendectomy",
+        "total_amount": 1975.5,
+        "date_of_service": "2026-10-15",
+        "prior_auth_number": "PA-99214-UHG"
+      }
+    },
+    {
+      "doc_id": "9c4691f3-478d-4dd7-99ad-7ca0882b538c",
+      "doc_type": "itemized_bill",
+      "ocr_confidence": 0.96,
+      "file_path": "data/seed_packs/CASE-2026-1002_itemized_bill.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "ST. MARY GENERAL HOSPITAL - ITEMIZED BILL\nPatient: Michael Chang\nTotal Billed: $1975.50\nLine Items:\n- Operating Room: $1185.30\n- Anesthesia: $493.88\n- Pharmacy: $296.32",
+      "extracted_fields": {
+        "facility_name": "St. Mary General Hospital",
+        "billed_total": 1975.5,
+        "paid_by_patient": 0.0
+      }
+    }
+  ],
+  "expected_outcome": "READY_FOR_APPROVAL"
+}

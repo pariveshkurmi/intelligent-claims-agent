@@ -1,0 +1,24 @@
+{
+  "case_id": "CASE-2026-1009",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Amara Okafor",
+  "scenario": "poor_scan",
+  "total_amount": 1576.5,
+  "notes": "Damaged, low-resolution scan with unreadable fields.",
+  "documents": [
+    {
+      "doc_id": "38457c07-2599-4a15-9889-b08705e8a002",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.42,
+      "file_path": "data/seed_packs/CASE-2026-1009_poor_scan.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "UN...DHE...THC... CL... FORM\nCl...nt: S...h J...k...\nAm...nt: $1???.?? [UNREADABLE BLURRED INK]",
+      "extracted_fields": {
+        "claimant_name": null,
+        "total_amount": null,
+        "ocr_warning": "High blur factor; character recognition below 50%"
+      }
+    }
+  ],
+  "expected_outcome": "MANUAL_REVIEW"
+}

@@ -1,0 +1,24 @@
+{
+  "case_id": "CASE-2026-1006",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Carlos Mendez",
+  "scenario": "poor_scan",
+  "total_amount": 1200.0,
+  "notes": "Damaged, low-resolution scan with unreadable fields.",
+  "documents": [
+    {
+      "doc_id": "ac861f4d-f4c1-44ae-a18f-738ebb8dc392",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.42,
+      "file_path": "data/seed_packs/CASE-2026-1006_poor_scan.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "UN...DHE...THC... CL... FORM\nCl...nt: S...h J...k...\nAm...nt: $1???.?? [UNREADABLE BLURRED INK]",
+      "extracted_fields": {
+        "claimant_name": null,
+        "total_amount": null,
+        "ocr_warning": "High blur factor; character recognition below 50%"
+      }
+    }
+  ],
+  "expected_outcome": "MANUAL_REVIEW"
+}

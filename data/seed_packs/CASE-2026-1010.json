@@ -1,0 +1,27 @@
+{
+  "case_id": "CASE-2026-1010",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Daniel Patel",
+  "scenario": "missing_docs",
+  "total_amount": 3400.0,
+  "notes": "Claim submitted without required itemized hospital bill.",
+  "documents": [
+    {
+      "doc_id": "6105f66e-ebd5-49c0-b2df-e8e712d26174",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.95,
+      "file_path": "data/seed_packs/CASE-2026-1010_claim_form.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "UHG CLAIM FORM\nClaimant: Daniel Patel\nAmount: $3400.00\nNotice: Itemized hospital bill and doctor referral missing.",
+      "extracted_fields": {
+        "claimant_name": "Daniel Patel",
+        "total_amount": 3400.0,
+        "missing_items": [
+          "itemized_bill",
+          "physician_referral"
+        ]
+      }
+    }
+  ],
+  "expected_outcome": "DOCS_PENDING"
+}

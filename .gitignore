@@ -1,0 +1,24 @@
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# PostgreSQL persistent mount
+data/postgres_data/
+
+# Environment files
+.env
+
+# Testing & Cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log

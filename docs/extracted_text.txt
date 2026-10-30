@@ -1,0 +1,332 @@
+UHG ACCOUNT • FDE CAPSTONE PROJECT
+Intelligent Claims Processing & Case Management Agent
+Problem Definition Document — apply LangChain, LangGraph and MCP to a real-world, end-to-end business process
+Item
+Details
+Audience
+Forward Deployed Engineers (FDEs), UHG account
+Prerequisite
+Completed training on LangChain, LangGraph and Model Context Protocol (MCP)
+Level
+L300 (Developer) — multi-agent orchestration, MCP servers, human approvals, evaluation
+Suggested duration
+4 hours of build time, followed by a demo and panel Q&A
+Team format
+Individual or small teams, as decided by the facilitator
+Core technology
+LangGraph, LangChain, MCP Python SDK (FastMCP), LangChain MCP adapters, Streamlit, PostgreSQL + pgvector, Docling, Docker Compose
+Cost
+Fully open source and self-hosted. The language model is the only usage-based cost (zero with a local Ollama model).
+1. The problem
+Insurance claims and service cases go through many hands before a decision is made. Today, most of this work is manual, which makes it slow, error-prone and hard to track. Claims and case teams face five everyday problems:
+Manual intake — claim details are typed in by hand from emails, forms and phone calls.
+Document-heavy work — adjusters read every invoice, report and photo to find the facts they need.
+Scattered information — policy, customer and document data sit in different systems.
+Long approval chains — cases wait in queues because nobody knows who should act next.
+Poor visibility — customers and managers cannot easily see where a case is or why it is delayed.
+Together these increase cycle time and make accurate, compliant servicing difficult.
+Your challenge
+Build a multi-agent AI system that captures a claim, reads and classifies its documents, summarises the evidence, assigns the right people, manages approvals and shows real-time status — with a secure, replayable audit trail of everything that happened.
+2. What you will build
+A LangGraph supervisor coordinates five LangChain specialist agents. The agents never talk to each other directly. They read and write the case only through four MCP servers, so every hand-off is stored in the case record and the audit log. A person always makes the final decision.
+2.1 The happy path for a new claim
+Claim submitted
+→
+Intake agent
+→
+Document agent
+→
+Summary agent
+→
+Routing agent
+→
+SLA & comms agent
+→
+Human approver
+The supervisor decides the order at run time. If documents are missing, the graph pauses and waits for them. If confidence is low or a step keeps failing, the case goes to manual review.
+The golden rule: agents prepare, people decide
+No agent and no MCP tool can approve, reject or settle a claim. The graph pauses with interrupt() and only a signed-in approver can resume it with a decision.
+2.2 Five design rules to follow
+Talk through MCP only. Agents reach data and actions only through MCP tools, resources and prompts.
+Least privilege. Each agent gets only the tools it needs (see section 4.1).
+Humans decide. There is no approve tool. Approvals happen at a LangGraph interrupt.
+Document text is data, not orders. Any instruction found inside a document is flagged and ignored.
+Everything is recorded. Every MCP write and human decision goes into an append-only audit log.
+3. Expected outcomes
+By the end of the capstone, your solution must deliver the eight outcomes below. Use the right-hand column as your checklist.
+#
+Outcome
+What “done” looks like
+1
+Multi-agent orchestration
+A LangGraph supervisor runs five LangChain specialists. Every hand-off is recorded in graph state and the audit log.
+2
+MCP servers
+Four MCP servers expose claims capabilities as tools, resources and prompts, shared by all agents through one protocol.
+3
+Digital intake
+A user can register a claim and upload documents in a Streamlit workspace.
+4
+Document intelligence
+Each document is OCR-read, classified, has its key fields extracted and is validated against the case and policy.
+5
+Grounded case summary
+A structured summary lists facts, evidence, missing information, risks and next action, citing the policy clause behind each risk.
+6
+Workflow and approvals
+Tasks are assigned, approvals requested, SLA timers set and overdue cases escalated. A human makes every decision.
+7
+Visibility and audit
+A searchable case store, a status dashboard and a complete, replayable action history are available.
+8
+Evaluation gate
+An evaluation suite with defined metrics and thresholds runs automatically and blocks a release if any threshold is missed.
+4. Solution design
+4.1 The agents
+Each agent does one job. Small models are enough for most specialists; use a mid-size model where reasoning and writing quality matter.
+Agent
+Its one job
+MCP tools it may use
+Model
+Supervisor (LangGraph node)
+Reads case status, picks the next specialist using structured output and merges results into graph state. Code guardrails reject out-of-order moves.
+case-mcp: get_case, case:// resource
+Mid-size
+Intake agent
+Registers the claim, checks policy coverage and flags likely duplicates.
+policy-mcp: get_policy, check_coverage; case-mcp: find_similar_cases, register_case
+Small
+Document agent
+Runs OCR, classification and field extraction on each document in parallel, validates them and flags low confidence.
+documents-mcp: list_documents, extract_text, classify_document, extract_fields, validate_case_documents
+Small
+Summary agent
+Writes the case summary (facts, evidence, missing info, risks, next action) and cites the policy clause behind each risk.
+case-mcp: get_case, save_summary; documents-mcp: list_documents; policy-mcp: search_policy_wording; prompt case_summary
+Mid-size
+Routing agent
+Picks an adjuster and an approver whose approval limit covers the claim, then requests approval. It never approves.
+workflow-mcp: get_workload, assign_case, request_approval
+Small
+SLA & comms agent
+Sets SLA timers, emails the approver and claimant, requests missing documents and sends decision letters.
+workflow-mcp: schedule_sla, send_notification, request_documents; prompts claimant_letter, approver_brief
+Small
+4.2 The MCP servers
+Remember the three MCP building blocks: tools are actions the model can call, resources are read-only context addressed by a URI, and prompts are reusable templates.
+Server
+Tools
+Resources
+Prompts
+case-mcp
+get_case, list_cases, find_similar_cases, register_case, save_summary
+case://{case_id}, case://{case_id}/timeline
+case_summary
+policy-mcp
+get_policy, check_coverage, search_policy_wording (pgvector search)
+policy://{policy_number}, policy-wording://{product}
+—
+documents-mcp
+list_documents, extract_text, classify_document, extract_fields, validate_case_documents
+document://{case_id}/{doc_id}
+—
+workflow-mcp
+get_workload, assign_case, request_approval, schedule_sla, send_notification, request_documents
+staff://directory, sla://rules
+claimant_letter, approver_brief
+MCP good practices for this project:
+Stateless servers — every call carries the case ID; all state lives in PostgreSQL.
+[…further good-practice bullets were not captured in the photos…]
+Use current features — use the newest protocol version your SDK supports and avoid deprecated features such as Sampling, Roots and Logging.
+4.3 The LangGraph orchestration
+Concept
+How you use it
+State
+ClaimState holds: case ID, messages, case status, next step, agent hops, stage results, human decision, errors and token usage.
+Nodes
+supervisor, the five specialists, human_review, await_documents, finalize and manual_review.
+Routing
+The supervisor returns Command(goto=...). A guard function allows only moves that fit the case status (for example, no routing before a summary exists). Repeated failures go to manual_review.
+Parallel work
+Send fans out one task per document; results are joined before validation.
+Human-in-the-loop
+interrupt() pauses the graph at human_review and await_documents. Streamlit resumes it with Command(resume=...) carrying the decision, rationale and approver.
+Persistence
+PostgresSaver checkpointer with thread ID = case ID, so a case can wait days and survive restarts. Checkpoint history allows replay for audits and debugging.
+Streaming
+stream_mode “updates” and “messages” show live agent progress in Streamlit.
+Resilience
+RetryPolicy on nodes, model fallback middleware and a recursion limit stop transient errors and endless loops.
+5. Technology stack
+The whole stack is open source and runs on a laptop or a single virtual machine using Docker Compose. Items marked Must use are required; items marked Recommended strengthen your solution and score.
+Capability
+Technology
+Status
+Multi-agent orchestration
+LangGraph — StateGraph, Command, Send, interrupt, PostgresSaver
+Must use
+Specialist agents
+LangChain create_agent with middleware (PIIMiddleware, ToolCallLimitMiddleware, ToolRetryMiddleware)
+Must use
+Tool and context protocol
+MCP Python SDK (FastMCP) + LangChain MCP adapters
+Must use
+Language models
+Any chat model via init_chat_model — local Ollama model or a small hosted model
+Must use
+Document intelligence
+Docling (OCR, layout, tables) + LLM structured output with Pydantic
+Must use
+Case store, audit log, memory
+PostgreSQL with pgvector; LangGraph Postgres checkpointer
+Must use
+User interface
+Streamlit multipage app
+Must use
+Packaging
+Docker Compose
+Must use
+Evaluation
+pytest + agentevals (trajectory match); openevals LLM judges
+Must use
+SLA timers and email
+APScheduler; Mailpit as the lab mail inbox
+Must use
+Sign-in and roles
+Keycloak (OpenID Connect) with st.login
+Recommended
+Observability
+Arize Phoenix with OpenInference tracing
+Recommended
+Extra PII protection
+Microsoft Presidio
+Recommended
+CI pipeline
+GitHub Actions running tests and the evaluation gate
+Recommended
+6. Before you start
+Prepare these before the session so the four hours go into building, not setup.
+Item
+What you need
+Machine
+Laptop or VM with 4 vCPUs and 16 GB RAM, Docker with Compose, Python 3.11+ and Git.
+Model
+An Ollama model with tool calling, pulled in advance, or an API key for a small hosted model, set in .env.
+Supporting services
+Facilitator-provided Compose file: PostgreSQL with pgvector, Keycloak with a lab realm and test users, Mailpit and Phoenix.
+Data
+30 labelled synthetic claim packs, plus policies, policy wording and staff with approval limits. No real customer data is used.
+6.1 Test scenarios in the claim packs
+Your system must handle all eight scenario types correctly. Use these to test each task as you build.
+Scenario
+What your system should do
+Clean claim
+Run the full happy path and pause for the approver with a complete summary.
+Poor or unreadable scan
+Flag low OCR confidence and send the case to manual review.
+Missing documents
+List what is missing, email the claimant a request and pause at await_documents.
+Duplicate claim
+Flag the likely duplicate at intake and show the matching case.
+Out of policy
+Flag the coverage problem and cite the relevant policy clause.
+Prompt injection
+Flag the instruction hidden in the document and do not follow it.
+Amount or name mismatch
+Raise a validation risk in the summary.
+7. Tasks
+Complete the six tasks in order. Each one builds on the previous one. Suggested times add up to four hours.
+Task
+Focus
+Time
+1
+Build the MCP servers
+45 min
+2
+Build the specialist agents with LangChain
+40 min
+3
+Orchestrate the agents with LangGraph
+50 min
+4
+Build the Streamlit claims workspace
+35 min
+5
+Govern, observe and audit
+25 min
+6
+Evaluate the agents
+45 min
+Task 1 — Build the MCP servers (~45 min)
+Objective: Expose claims capabilities through one standard protocol.
+Build case-mcp and policy-mcp with FastMCP: the lookup and registration tools, the case://{case_id} and policy://{policy_number} resources, and the case_summary prompt.
+Build documents-mcp: extract_text with Docling (OCR on), and classify_document and extract_fields with LLM structured output. Return the OCR confidence and flag any text that tries to instruct the system.
+Build workflow-mcp: workload, assignment, approval request, SLA scheduling, notifications through Mailpit and document requests. Do not add any tool that approves.
+Test every server in MCP Inspector over stdio, then start them over Streamable HTTP with Docker Compose.
+You are done when...
+✓  All four servers start with Docker Compose.
+✓  Every tool, resource and prompt works in MCP Inspector.
+✓  No tool can approve, reject or settle a claim.
+Task 2 — Build the specialist agents with LangChain (~40 min)
+Objective: Create five agents that each do one job well.
+Load tools from the four servers with the LangChain MCP adapter, and give each specialist only the tools listed in section 4.1.
+Create each specialist with create_agent: its own system prompt, a small model, and middleware (PIIMiddleware for emails and ID numbers, ToolCallLimitMiddleware, ToolRetryMiddleware).
+Load the case_summary and claimant_letter prompts from MCP instead of hard-coding them.
+Test each specialist on a clean pack, a poor scan, a missing document, a duplicate and the prompt-injection pack.
+You are done when...
+✓  Each agent works on its own against the test packs.
+✓  Each agent can see only its permitted tools.
+✓  PII is redacted before it reaches the model.
+Task 3 — Orchestrate the agents with LangGraph (~50 min)
+Objective: Create one supervised, durable process from intake to decision.
+Define ClaimState and the nodes from section 4.3.
+Write the supervisor: structured output Route(next, reason), a guard function for allowed moves, and a path to manual_review for low confidence or repeated failure.
+Fan out document processing with Send, then join the results for validation.
+Add interrupt() for approval and for missing documents, with a PostgresSaver checkpointer keyed by case ID.
+Run claims end to end from a script: approve, reject, request more information and the low-confidence path. Replay one case from its checkpoint history.
+You are done when...
+✓  A clean claim runs from intake to the approval pause.
+✓  A paused case survives a restart and resumes correctly.
+✓  Out-of-order moves are blocked by the guard function.
+Task 4 — Build the Streamlit claims workspace (~35 min)
+Objective: Give adjusters and approvers one place to work.
+Add sign-in with st.login against Keycloak, and read the adjuster, approver and supervisor roles from the token.
+Build the pages: submit a claim with documents, the case queue, and a case workspace showing summary, documents, extracted fields, timeline and live agent progress from graph streaming.
+Build the approvals page: the approver reads the summary and risks, then approves, rejects or asks for more information with a rationale. After checking the approver’s role and limit, the app resumes the graph with Command(resume=...).
+Add an “Ask the supervisor” chat that answers questions about a case from MCP resources, with streamed replies.
+Task 5 — Govern, observe and audit (~25 min)
+Objective: Make every agent action visible, safe and traceable.
+Trace every run in Phoenix with OpenInference: agent hops, MCP tool calls, tokens and latency per node.
+Write every MCP write and human decision to the append-only audit table (actor, time, before and after), linked to the checkpoint history.
+Check PII redaction in traces and messages, confirm the injection pack is flagged and ignored, and trigger an SLA breach to see the escalation email in Mailpit.
+You are done when...
+✓  Every run is visible as a trace.
+✓  The audit log shows who did what and when.
+✓  No PII leaks; injection is blocked; the SLA escalation email arrives.
+Task 6 — Evaluate the agents (~45 min)
+Objective: Prove quality with numbers before any release (see section 8).
+Load the golden dataset (inputs, expected outcomes, trajectories, labelled fields) into Phoenix.
+Run the evaluation harness: deterministic metrics, agentevals trajectory matching and openevals judges.
+Review the results in a Streamlit evaluation dashboard and Phoenix experiments. Change one prompt or model tier, rerun and compare.
+Add the release gate: CI fails when any metric misses its threshold.
+8. Evaluation metrics
+[Section 8’s metrics table was not captured in the photos — only its last row (“…tokens per case … 10% of baseline”) is visible. Add the table here.]
+Tips for using LLM judges
+Use a judge model that is stronger than your agent models, ideally from a different model family. Have a person spot-check about 10% of judge scores. Thresholds are lab starting points, not production values.
+9. What to submit
+Deliverable
+Description
+Source code repository
+Git repository with the four MCP servers, the agents, the LangGraph graph, the Streamlit app and the evaluation suite.
+docker-compose.yml
+One command starts the whole stack.
+README
+Setup steps, how to run a claim end to end, and how to run the evaluation.
+Architecture diagram
+One page showing the UI, graph, agents, MCP servers and data layer.
+Evaluation report
+Results for every metric in section 8 against its threshold, plus one before-and-after comparison.
+Live demo
+Show a clean claim, a missing-document claim, the prompt-injection pack and an approval, then replay a case from its history.
+Presentation
+A short walkthrough of your design choices, results, limitations and next steps.

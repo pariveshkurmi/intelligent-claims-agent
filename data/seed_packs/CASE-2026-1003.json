@@ -1,0 +1,41 @@
+{
+  "case_id": "CASE-2026-1003",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Emily Watson",
+  "scenario": "clean_claim",
+  "total_amount": 2101.0,
+  "notes": "Clean happy-path claim with complete supporting itemized bills.",
+  "documents": [
+    {
+      "doc_id": "b0d2e419-28f2-4cfb-b4a6-8186491d51f4",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.98,
+      "file_path": "data/seed_packs/CASE-2026-1003_claim_form.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "UNITEDHEALTHCARE HEALTH CLAIM FORM\nClaimant: Emily Watson\nPolicy: POL-UHG-001\nDiagnosis: Acute Appendectomy\nClaimed: $2101.00\nProvider: St. Mary General Hospital",
+      "extracted_fields": {
+        "claimant_name": "Emily Watson",
+        "policy_number": "POL-UHG-001",
+        "diagnosis": "Acute Appendicitis",
+        "procedure": "Laparoscopic Appendectomy",
+        "total_amount": 2101.0,
+        "date_of_service": "2026-10-15",
+        "prior_auth_number": "PA-99214-UHG"
+      }
+    },
+    {
+      "doc_id": "5571acfb-3bb4-453b-af72-dc50f96b2f1d",
+      "doc_type": "itemized_bill",
+      "ocr_confidence": 0.96,
+      "file_path": "data/seed_packs/CASE-2026-1003_itemized_bill.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "ST. MARY GENERAL HOSPITAL - ITEMIZED BILL\nPatient: Emily Watson\nTotal Billed: $2101.00\nLine Items:\n- Operating Room: $1260.60\n- Anesthesia: $525.25\n- Pharmacy: $315.15",
+      "extracted_fields": {
+        "facility_name": "St. Mary General Hospital",
+        "billed_total": 2101.0,
+        "paid_by_patient": 0.0
+      }
+    }
+  ],
+  "expected_outcome": "READY_FOR_APPROVAL"
+}

@@ -1,0 +1,25 @@
+{
+  "case_id": "CASE-2026-1018",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Carlos Mendez",
+  "scenario": "out_of_policy",
+  "total_amount": 7500.0,
+  "notes": "Elective cosmetic procedure excluded under Section 3.1.",
+  "documents": [
+    {
+      "doc_id": "0ccffed0-7e69-49ec-86fa-bd871e7ca81d",
+      "doc_type": "itemized_bill",
+      "ocr_confidence": 0.94,
+      "file_path": "data/seed_packs/CASE-2026-1018_cosmetic_bill.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "BEVERLY AESTHETICS CLINIC\nPatient: Carlos Mendez\nProcedure: Elective Cosmetic Rhinoplasty and Facial Contouring\nTotal Billed: $7500.00",
+      "extracted_fields": {
+        "claimant_name": "Carlos Mendez",
+        "procedure": "Cosmetic Rhinoplasty",
+        "category": "Elective Cosmetic Surgery",
+        "total_amount": 7500.0
+      }
+    }
+  ],
+  "expected_outcome": "READY_FOR_APPROVAL_REJECTION_RECOMMENDED"
+}

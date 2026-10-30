@@ -1,0 +1,25 @@
+{
+  "case_id": "CASE-2026-1020",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Brandon Lee",
+  "scenario": "out_of_policy",
+  "total_amount": 7751.0,
+  "notes": "Elective cosmetic procedure excluded under Section 3.1.",
+  "documents": [
+    {
+      "doc_id": "8498145e-d526-4dce-a002-aeac42d15946",
+      "doc_type": "itemized_bill",
+      "ocr_confidence": 0.94,
+      "file_path": "data/seed_packs/CASE-2026-1020_cosmetic_bill.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "BEVERLY AESTHETICS CLINIC\nPatient: Brandon Lee\nProcedure: Elective Cosmetic Rhinoplasty and Facial Contouring\nTotal Billed: $7751.00",
+      "extracted_fields": {
+        "claimant_name": "Brandon Lee",
+        "procedure": "Cosmetic Rhinoplasty",
+        "category": "Elective Cosmetic Surgery",
+        "total_amount": 7751.0
+      }
+    }
+  ],
+  "expected_outcome": "READY_FOR_APPROVAL_REJECTION_RECOMMENDED"
+}

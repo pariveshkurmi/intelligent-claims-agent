@@ -1,0 +1,25 @@
+{
+  "case_id": "CASE-2026-1019",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Jessica Taylor",
+  "scenario": "out_of_policy",
+  "total_amount": 7625.5,
+  "notes": "Elective cosmetic procedure excluded under Section 3.1.",
+  "documents": [
+    {
+      "doc_id": "2166028f-e348-4ee4-a126-18a32e7cb91d",
+      "doc_type": "itemized_bill",
+      "ocr_confidence": 0.94,
+      "file_path": "data/seed_packs/CASE-2026-1019_cosmetic_bill.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "BEVERLY AESTHETICS CLINIC\nPatient: Jessica Taylor\nProcedure: Elective Cosmetic Rhinoplasty and Facial Contouring\nTotal Billed: $7625.50",
+      "extracted_fields": {
+        "claimant_name": "Jessica Taylor",
+        "procedure": "Cosmetic Rhinoplasty",
+        "category": "Elective Cosmetic Surgery",
+        "total_amount": 7625.5
+      }
+    }
+  ],
+  "expected_outcome": "READY_FOR_APPROVAL_REJECTION_RECOMMENDED"
+}

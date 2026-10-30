@@ -1,0 +1,27 @@
+{
+  "case_id": "CASE-2026-1011",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Hannah Schmidt",
+  "scenario": "missing_docs",
+  "total_amount": 3525.5,
+  "notes": "Claim submitted without required itemized hospital bill.",
+  "documents": [
+    {
+      "doc_id": "7ee7e7f1-3785-4c9a-9414-ea03209e7151",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.95,
+      "file_path": "data/seed_packs/CASE-2026-1011_claim_form.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "UHG CLAIM FORM\nClaimant: Hannah Schmidt\nAmount: $3525.50\nNotice: Itemized hospital bill and doctor referral missing.",
+      "extracted_fields": {
+        "claimant_name": "Hannah Schmidt",
+        "total_amount": 3525.5,
+        "missing_items": [
+          "itemized_bill",
+          "physician_referral"
+        ]
+      }
+    }
+  ],
+  "expected_outcome": "DOCS_PENDING"
+}

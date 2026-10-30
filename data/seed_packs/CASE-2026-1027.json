@@ -1,0 +1,35 @@
+{
+  "case_id": "CASE-2026-1027",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Emily Watson",
+  "scenario": "mismatch",
+  "total_amount": 2325.5,
+  "notes": "Discrepancy between claim form claimant and hospital bill patient name/total.",
+  "documents": [
+    {
+      "doc_id": "427be832-f151-4ba1-bb7c-2fe6cbc34429",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.95,
+      "file_path": "data/seed_packs/CASE-2026-1027_mismatch_claim.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "CLAIM FORM\nClaimant: Emily Watson\nTotal Claimed: $2325.50",
+      "extracted_fields": {
+        "claimant_name": "Emily Watson",
+        "total_amount": 2325.5
+      }
+    },
+    {
+      "doc_id": "2a79f8ad-66da-4c39-a952-974f90bbdc2c",
+      "doc_type": "itemized_bill",
+      "ocr_confidence": 0.95,
+      "file_path": "data/seed_packs/CASE-2026-1027_mismatch_bill.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "HOSPITAL BILL\nPatient: Jonathan Davis [NAME MISMATCH]\nTotal: $3175.50 [AMOUNT MISMATCH]",
+      "extracted_fields": {
+        "patient_name_on_bill": "Jonathan Davis",
+        "bill_total": 3175.5
+      }
+    }
+  ],
+  "expected_outcome": "READY_FOR_APPROVAL_RISK_FLAGGED"
+}

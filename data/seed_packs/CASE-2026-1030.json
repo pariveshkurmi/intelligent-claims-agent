@@ -1,0 +1,23 @@
+{
+  "case_id": "CASE-2026-1030",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Carlos Mendez",
+  "scenario": "sla_breach",
+  "total_amount": 4225.5,
+  "notes": "Unserviced claim exceeding standard 48h turnaround time.",
+  "documents": [
+    {
+      "doc_id": "85a3889a-6270-4a61-a9e6-1d9b359287f7",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.97,
+      "file_path": "data/seed_packs/CASE-2026-1030_sla_breach.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "URGENT CLAIM FORM\nClaimant: Carlos Mendez\nTotal: $4225.50\nReceived 74 hours ago without reviewer response.",
+      "extracted_fields": {
+        "claimant_name": "Carlos Mendez",
+        "total_amount": 4225.5
+      }
+    }
+  ],
+  "expected_outcome": "ESCALATED"
+}

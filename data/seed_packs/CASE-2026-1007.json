@@ -1,0 +1,24 @@
+{
+  "case_id": "CASE-2026-1007",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Jessica Taylor",
+  "scenario": "poor_scan",
+  "total_amount": 1325.5,
+  "notes": "Damaged, low-resolution scan with unreadable fields.",
+  "documents": [
+    {
+      "doc_id": "9bb6d2e5-e564-481b-9da6-62824f0e78cf",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.42,
+      "file_path": "data/seed_packs/CASE-2026-1007_poor_scan.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "UN...DHE...THC... CL... FORM\nCl...nt: S...h J...k...\nAm...nt: $1???.?? [UNREADABLE BLURRED INK]",
+      "extracted_fields": {
+        "claimant_name": null,
+        "total_amount": null,
+        "ocr_warning": "High blur factor; character recognition below 50%"
+      }
+    }
+  ],
+  "expected_outcome": "MANUAL_REVIEW"
+}

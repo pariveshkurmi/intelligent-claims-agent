@@ -1,0 +1,41 @@
+{
+  "case_id": "CASE-2026-1004",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "David Kim",
+  "scenario": "clean_claim",
+  "total_amount": 2226.5,
+  "notes": "Clean happy-path claim with complete supporting itemized bills.",
+  "documents": [
+    {
+      "doc_id": "b6120da1-1da9-4e76-8b03-579a0d74a2e1",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.98,
+      "file_path": "data/seed_packs/CASE-2026-1004_claim_form.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "UNITEDHEALTHCARE HEALTH CLAIM FORM\nClaimant: David Kim\nPolicy: POL-UHG-001\nDiagnosis: Acute Appendectomy\nClaimed: $2226.50\nProvider: St. Mary General Hospital",
+      "extracted_fields": {
+        "claimant_name": "David Kim",
+        "policy_number": "POL-UHG-001",
+        "diagnosis": "Acute Appendicitis",
+        "procedure": "Laparoscopic Appendectomy",
+        "total_amount": 2226.5,
+        "date_of_service": "2026-10-15",
+        "prior_auth_number": "PA-99214-UHG"
+      }
+    },
+    {
+      "doc_id": "bd80be7e-333e-42b6-b35d-dd61924a9948",
+      "doc_type": "itemized_bill",
+      "ocr_confidence": 0.96,
+      "file_path": "data/seed_packs/CASE-2026-1004_itemized_bill.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "ST. MARY GENERAL HOSPITAL - ITEMIZED BILL\nPatient: David Kim\nTotal Billed: $2226.50\nLine Items:\n- Operating Room: $1335.90\n- Anesthesia: $556.62\n- Pharmacy: $333.97",
+      "extracted_fields": {
+        "facility_name": "St. Mary General Hospital",
+        "billed_total": 2226.5,
+        "paid_by_patient": 0.0
+      }
+    }
+  ],
+  "expected_outcome": "READY_FOR_APPROVAL"
+}

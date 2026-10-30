@@ -1,0 +1,41 @@
+{
+  "case_id": "CASE-2026-1005",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Rachel Adams",
+  "scenario": "clean_claim",
+  "total_amount": 2352.0,
+  "notes": "Clean happy-path claim with complete supporting itemized bills.",
+  "documents": [
+    {
+      "doc_id": "ca8c1a3d-eed9-44bc-9aef-c5afb8aa0120",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.98,
+      "file_path": "data/seed_packs/CASE-2026-1005_claim_form.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "UNITEDHEALTHCARE HEALTH CLAIM FORM\nClaimant: Rachel Adams\nPolicy: POL-UHG-001\nDiagnosis: Acute Appendectomy\nClaimed: $2352.00\nProvider: St. Mary General Hospital",
+      "extracted_fields": {
+        "claimant_name": "Rachel Adams",
+        "policy_number": "POL-UHG-001",
+        "diagnosis": "Acute Appendicitis",
+        "procedure": "Laparoscopic Appendectomy",
+        "total_amount": 2352.0,
+        "date_of_service": "2026-10-15",
+        "prior_auth_number": "PA-99214-UHG"
+      }
+    },
+    {
+      "doc_id": "5df6f250-c35e-4e55-a11a-2492ac461e70",
+      "doc_type": "itemized_bill",
+      "ocr_confidence": 0.96,
+      "file_path": "data/seed_packs/CASE-2026-1005_itemized_bill.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "ST. MARY GENERAL HOSPITAL - ITEMIZED BILL\nPatient: Rachel Adams\nTotal Billed: $2352.00\nLine Items:\n- Operating Room: $1411.20\n- Anesthesia: $588.00\n- Pharmacy: $352.80",
+      "extracted_fields": {
+        "facility_name": "St. Mary General Hospital",
+        "billed_total": 2352.0,
+        "paid_by_patient": 0.0
+      }
+    }
+  ],
+  "expected_outcome": "READY_FOR_APPROVAL"
+}

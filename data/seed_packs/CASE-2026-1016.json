@@ -1,0 +1,25 @@
+{
+  "case_id": "CASE-2026-1016",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Robert Langdon",
+  "scenario": "duplicate_claim",
+  "total_amount": 1450.0,
+  "notes": "Resubmission of already paid invoice ER-88123 matching CASE-HIST-001.",
+  "documents": [
+    {
+      "doc_id": "3f6924d4-eff2-4423-8b05-2da13902aef1",
+      "doc_type": "itemized_bill",
+      "ocr_confidence": 0.97,
+      "file_path": "data/seed_packs/CASE-2026-1016_duplicate_bill.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "EMERGENCY CARE BILL - INVOICE #ER-88123\nPatient: Robert Langdon\nTotal Billed: $1450.00\nDate of Service: 2026-09-15",
+      "extracted_fields": {
+        "claimant_name": "Robert Langdon",
+        "invoice_number": "ER-88123",
+        "total_amount": 1450.0,
+        "date_of_service": "2026-09-15"
+      }
+    }
+  ],
+  "expected_outcome": "MANUAL_REVIEW"
+}

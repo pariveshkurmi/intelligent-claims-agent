@@ -1,0 +1,25 @@
+{
+  "case_id": "CASE-2026-1021",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Amara Okafor",
+  "scenario": "out_of_policy",
+  "total_amount": 7876.5,
+  "notes": "Elective cosmetic procedure excluded under Section 3.1.",
+  "documents": [
+    {
+      "doc_id": "b7f9d2c3-0981-4ba7-8b97-38cbb54629a6",
+      "doc_type": "itemized_bill",
+      "ocr_confidence": 0.94,
+      "file_path": "data/seed_packs/CASE-2026-1021_cosmetic_bill.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "BEVERLY AESTHETICS CLINIC\nPatient: Amara Okafor\nProcedure: Elective Cosmetic Rhinoplasty and Facial Contouring\nTotal Billed: $7876.50",
+      "extracted_fields": {
+        "claimant_name": "Amara Okafor",
+        "procedure": "Cosmetic Rhinoplasty",
+        "category": "Elective Cosmetic Surgery",
+        "total_amount": 7876.5
+      }
+    }
+  ],
+  "expected_outcome": "READY_FOR_APPROVAL_REJECTION_RECOMMENDED"
+}

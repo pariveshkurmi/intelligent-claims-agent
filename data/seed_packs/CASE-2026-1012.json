@@ -1,0 +1,27 @@
+{
+  "case_id": "CASE-2026-1012",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Anthony Rossi",
+  "scenario": "missing_docs",
+  "total_amount": 3651.0,
+  "notes": "Claim submitted without required itemized hospital bill.",
+  "documents": [
+    {
+      "doc_id": "336adf46-cb37-43a9-92d1-029cb768205d",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.95,
+      "file_path": "data/seed_packs/CASE-2026-1012_claim_form.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "UHG CLAIM FORM\nClaimant: Anthony Rossi\nAmount: $3651.00\nNotice: Itemized hospital bill and doctor referral missing.",
+      "extracted_fields": {
+        "claimant_name": "Anthony Rossi",
+        "total_amount": 3651.0,
+        "missing_items": [
+          "itemized_bill",
+          "physician_referral"
+        ]
+      }
+    }
+  ],
+  "expected_outcome": "DOCS_PENDING"
+}

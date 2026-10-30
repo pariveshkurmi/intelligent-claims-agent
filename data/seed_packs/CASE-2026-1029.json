@@ -1,0 +1,23 @@
+{
+  "case_id": "CASE-2026-1029",
+  "policy_id": "POL-UHG-001",
+  "claimant_name": "Rachel Adams",
+  "scenario": "sla_breach",
+  "total_amount": 4100.0,
+  "notes": "Unserviced claim exceeding standard 48h turnaround time.",
+  "documents": [
+    {
+      "doc_id": "28086eb9-fc69-46f9-8bdc-9622a0afcf11",
+      "doc_type": "claim_form",
+      "ocr_confidence": 0.97,
+      "file_path": "data/seed_packs/CASE-2026-1029_sla_breach.txt",
+      "is_injection_flagged": false,
+      "ocr_text": "URGENT CLAIM FORM\nClaimant: Rachel Adams\nTotal: $4100.00\nReceived 74 hours ago without reviewer response.",
+      "extracted_fields": {
+        "claimant_name": "Rachel Adams",
+        "total_amount": 4100.0
+      }
+    }
+  ],
+  "expected_outcome": "ESCALATED"
+}
