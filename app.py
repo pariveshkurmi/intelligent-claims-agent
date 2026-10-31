@@ -28,13 +28,29 @@ st.markdown("---")
 
 # Query Live Database Metrics
 try:
-    total_claims = execute_query("SELECT COUNT(*) as count FROM cases;")[0]["count"]
-    ready_approval = execute_query("SELECT COUNT(*) as count FROM cases WHERE status = 'READY_FOR_APPROVAL';")[0]["count"]
-    docs_pending = execute_query("SELECT COUNT(*) as count FROM cases WHERE status = 'DOCS_PENDING';")[0]["count"]
-    manual_review = execute_query("SELECT COUNT(*) as count FROM cases WHERE status = 'MANUAL_REVIEW';")[0]["count"]
-    approved_count = execute_query("SELECT COUNT(*) as count FROM cases WHERE status = 'APPROVED';")[0]["count"]
-except Exception as e:
+    counts_rows = execute_query(
+        """
+        SELECT 
+            COUNT(*) as total,
+            COUNT(*) FILTER (WHERE status = 'READY_FOR_APPROVAL') as ready,
+            COUNT(*) FILTER (WHERE status = 'DOCS_PENDING') as pending,
+            COUNT(*) FILTER (WHERE status = 'MANUAL_REVIEW') as manual,
+            COUNT(*) FILTER (WHERE status = 'APPROVED') as approved
+        FROM cases;
+        """
+    )
+    if counts_rows:
+        row = counts_rows[0]
+        total_claims = row.get("total", 0)
+        ready_approval = row.get("ready", 0)
+        docs_pending = row.get("pending", 0)
+        manual_review = row.get("manual", 0)
+        approved_count = row.get("approved", 0)
+    else:
+        total_claims, ready_approval, docs_pending, manual_review, approved_count = 0, 0, 0, 0, 0
+except Exception:
     total_claims, ready_approval, docs_pending, manual_review, approved_count = 0, 0, 0, 0, 0
+    st.warning("⚠️ Could not connect to PostgreSQL on port 5432. Please ensure `docker compose up -d` is running.")
 
 # Metric KPI Cards
 col1, col2, col3, col4, col5 = st.columns(5)

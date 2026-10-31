@@ -13,9 +13,20 @@ flowchart TD
     D3["Day 3: LangGraph<br>Optimized 5-6 Call Routing | Send Fan-out | interrupt() + PostgresSaver"]
     D4["Day 4: Streamlit<br>Multipage UX | Event-driven Graph Streaming | Resume Token Injection"]
     D5["Day 5: Governance<br>Arize Phoenix Tracing | Append-only Audit Log | Automated Section 8 Gate"]
+    D6["Day 6: Submission & Rehearsal<br>Live Demo Runbook | Dual-Mode Rehearsal (UI + CLI) | Comprehensive README"]
 
-    D1 --> D2 --> D3 --> D4 --> D5
+    D1 --> D2 --> D3 --> D4 --> D5 --> D6
 ```
+
+---
+
+## Day 6: Buffer, Live Demo Rehearsal & Submission Packaging
+
+| Decision Area | Options Considered | Selected Choice | Rationale & Trade-offs ("Why We Chose It") |
+| :--- | :--- | :--- | :--- |
+| **Demo Rehearsal Mode** | **A.** UI-only manual clicking walkthrough<br>**B.** CLI-only headless script<br>**C.** Dual-Mode Rehearsal (Interactive Streamlit + Headless CLI Runner `run_claim.py`) | **Option C: Dual-Mode Rehearsal (Interactive UI + Headless CLI)** | • **Stage Confidence:** Allows presenter to showcase the rich Streamlit UI live, while providing a zero-risk, instantaneous CLI fallback (`python -m src.orchestration.run_claim --scenario all`) if browser or network glitches occur.<br>• **Section 9 Compliance:** Pre-configures all 4 mandated demo scenarios: Clean Claim, Missing Docs, Prompt Injection, and Time-Travel Checkpoint Replay. |
+| **Panel Q&A Preparation** | **A.** Ad-hoc improvisational responses<br>**B.** Structured Architecture Decision Runbook (`docs/demo_rehearsal_script.md`) | **Option B: Structured Decision Runbook** | • **Rigorous Defense:** Arms the presenter with concrete answers to the 10 most common panel objections (e.g. pgvector vs. Pinecone, 5-6 LLM budget vs. 15 ping-pong calls, PII regex vs. prompt scrubbing).<br>• **Traceable Standards:** Directly cites Section 8 metric thresholds, HIPAA compliance, and the Golden Rule (*"Agents prepare, people decide"*). |
+| **Evaluation Reporting Format** | **A.** Single static scorecard table<br>**B.** Comparative Scorecard with Baseline vs. Optimized Before-and-After Analysis | **Option B: Comparative Scorecard (Baseline vs. Optimized)** | • **Section 9 Deliverable Mandate:** Section 9 explicitly requires *"one before-and-after comparison."*<br>• **Executive Proof:** Quantifies the ROI of the architecture: 74% latency reduction, 78% call reduction, 81% cost reduction, and 100% prompt injection neutralization. |
 
 ---
 

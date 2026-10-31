@@ -1,0 +1,17 @@
+ST. MARY GENERAL HOSPITAL - ITEMIZED BILL
+Patient Name: Sarah Jenkins
+Account Number: ACT-8829104
+Facility: St. Mary General Hospital
+Date of Service: 2026-10-15
+Department: Surgical Inpatient Services
+
+Itemized Charges:
+- Operating Room & Surgical Suite: $1110.00
+- Anesthesiology Services: $462.50
+- Pharmacy & Post-Op Medications: $277.50
+
+Total Billed: $1850.00
+Amount Paid by Patient: $0.00
+Balance Due: $1850.00
+Status: Unpaid / Pending Insurance Adjudication
+

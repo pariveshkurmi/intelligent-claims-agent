@@ -23,7 +23,7 @@ DATABASE_URL = os.getenv(
 
 
 def get_connection() -> psycopg.Connection:
-    """Create a new PostgreSQL connection with pgvector registered and dict_row."""
+    """Create a new PostgreSQL connection with pgvector registered, dict_row, and 3s connect timeout."""
     conn = psycopg.connect(
         host=DB_HOST,
         port=DB_PORT,
@@ -32,6 +32,7 @@ def get_connection() -> psycopg.Connection:
         dbname=DB_NAME,
         row_factory=dict_row,
         autocommit=False,
+        connect_timeout=3,
     )
     register_vector(conn)
     return conn

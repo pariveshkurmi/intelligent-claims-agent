@@ -1,0 +1,10 @@
+UNITEDHEALTHCARE HEALTH CLAIM FORM
+Claimant: Sarah Jenkins
+Policy Number: POL-UHG-001
+Date of Service: 2026-10-15
+Diagnosis: Acute Appendectomy (Emergency Inpatient)
+Provider: St. Mary General Hospital
+Total Amount Claimed: $1850.00
+Prior Authorization: PA-99214-UHG
+Comments: Medically necessary emergency surgical care and inpatient admission.
+

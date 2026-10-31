@@ -38,7 +38,7 @@ except Exception as e:
 
 # Top KPI Filters
 total_count = len(all_cases)
-ready_count = sum(1 for c in all_cases if c["status"] == "READY_FOR_APPROVAL")
+ready_count = sum(1 for c in all_cases if c["status"].startswith("READY_FOR_APPROVAL"))
 pending_docs_count = sum(1 for c in all_cases if c["status"] == "DOCS_PENDING")
 manual_count = sum(1 for c in all_cases if c["status"] in ("MANUAL_REVIEW", "OUT_OF_POLICY", "DUPLICATE_FLAGGED"))
 approved_count = sum(1 for c in all_cases if c["status"] == "APPROVED")
@@ -96,8 +96,12 @@ for c in all_cases:
             continue
 
     # Status filter
-    if status_filter != "ALL" and c["status"] != status_filter:
-        continue
+    if status_filter != "ALL":
+        if status_filter == "READY_FOR_APPROVAL":
+            if not c["status"].startswith("READY_FOR_APPROVAL"):
+                continue
+        elif c["status"] != status_filter:
+            continue
 
     # Assignee filter
     if assignee_filter == "Assigned to Me":
@@ -149,8 +153,9 @@ else:
                         st.session_state["selected_case_id"] = cid
                         st.switch_page("pages/3_Case_Workspace.py")
                 with btn_cols[1]:
-                    if status == "READY_FOR_APPROVAL":
-                        if st.button("Approve", key=f"q_app_{cid}", type="primary", use_container_width=True):
+                    if status.startswith("READY_FOR_APPROVAL"):
+                        btn_label = "Review" if "REJECTION" in status else "Approve"
+                        if st.button(btn_label, key=f"q_app_{cid}", type="primary", use_container_width=True):
                             st.session_state["selected_approval_case_id"] = cid
                             st.switch_page("pages/4_Approvals.py")
                     elif status == "DOCS_PENDING":

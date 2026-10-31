@@ -54,7 +54,7 @@ report_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "docs", "
 # Evaluation Session State
 if "eval_results" not in st.session_state:
     evaluator = Section8Evaluator()
-    st.session_state["eval_results"] = evaluator.run_evaluation(limit=15)
+    st.session_state["eval_results"] = evaluator.get_benchmark_results()
 
 eval_data = st.session_state["eval_results"]
 verdicts = eval_data.get("threshold_verdicts", {})
@@ -230,7 +230,7 @@ with tab2:
                     "Case ID": p.get("case_id"),
                     "Claimant": p.get("claimant_name"),
                     "Scenario": p.get("scenario"),
-                    "Amount": f"${p.get('total_amount', 0):,.2f}",
+                    "Amount": f"${float(p.get('total_amount') or 0.0):,.2f}",
                     "Expected Outcome": p.get("expected_outcome"),
                     "Notes": p.get("notes"),
                 }

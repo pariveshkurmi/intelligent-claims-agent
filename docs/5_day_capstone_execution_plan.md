@@ -149,18 +149,21 @@ To directly satisfy Section 8 **Metric 5 (Redundant Hops $\le 1$)** and **Metric
 ---
 
 ## Day 6 (Wednesday, Nov 4): Buffer, Live Demo Rehearsal & Submission Prep
+**Status:** `COMPLETED`  
 **Focus:** Dry-run demo, architecture documentation, and final submission pack.  
 **Estimated Time:** 2 Hours
 
 ### Deliverables:
 1. **Live Demo Script Rehearsal (covering Section 9 criteria):**
-   * Demo 1: Clean claim happy path to human approval.
-   * Demo 2: Missing document $\to$ email $\to$ pause $\to$ resume.
-   * Demo 3: Prompt injection document $\to$ flagged and safely ignored.
-   * Demo 4: Replay a case from historical checkpoint.
+   * [x] **Demo 1:** Clean claim happy path to human approval (`CLM-SCENARIO-01` / `CASE-2026-DEMO-01`).
+   * [x] **Demo 2:** Missing document $\to$ email $\to$ pause $\to$ resume (`CLM-SCENARIO-03` / `CASE-2026-DEMO-02`).
+   * [x] **Demo 3:** Prompt injection document $\to$ flagged and safely ignored (`CLM-SCENARIO-06` / `CASE-2026-DEMO-04`).
+   * [x] **Demo 4:** Replay a case from historical checkpoint (`CASE-2026-DEMO-01` lineage in `PostgresSaver`).
+   * [x] **Rehearsal Runbook:** Created [`docs/demo_rehearsal_script.md`](demo_rehearsal_script.md) with step-by-step speaker script, Mailpit inspection, and Top 10 panel Q&A defense.
 2. **Submission Deliverables:**
-   * `README.md` with setup and reproduction commands.
-   * 1-page architecture diagram.
-   * Evaluation report comparing baseline vs. optimized agent prompt scores.
-   * Clean Git commit and push.
+   * [x] **`README.md`:** Comprehensive master guide with quickstart, Docker commands, architecture diagrams, live demo walkthrough, and Section 8 scorecard.
+   * [x] **1-Page Architecture Diagram:** [`docs/architecture_diagram.md`](architecture_diagram.md) with 5-layer Mermaid flow and key principles.
+   * [x] **Evaluation Report:** [`docs/evaluation_report.md`](evaluation_report.md) with full 18-metric scorecard, scenario distribution, and **Baseline vs. Optimized Before-and-After Analysis**.
+   * [x] **Architecture Decision Records:** [`docs/decisions.md`](decisions.md) updated with Day 6 rehearsal and packaging ADRs.
+   * [x] **Clean Git Commit & Push:** All deliverables verified and prepared for submission.
 

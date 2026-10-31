@@ -79,6 +79,11 @@ def get_current_user() -> Dict[str, Any]:
     return st.session_state["current_user"]
 
 
+def require_auth() -> Dict[str, Any]:
+    """Ensure user is authenticated and return the active staff profile."""
+    return get_current_user()
+
+
 def set_current_user(staff_id: str):
     """Switch active profile to a specific staff ID."""
     for s in DEFAULT_STAFF:

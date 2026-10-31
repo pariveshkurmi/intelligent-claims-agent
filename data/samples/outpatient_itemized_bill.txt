@@ -1,0 +1,17 @@
+METRO HEALTH CLINIC - ITEMIZED BILL
+Patient Name: Sarah Jenkins
+Account Number: MHC-551092
+Facility: Metro Health Clinic
+Date of Service: 2026-10-20
+Department: Urgent Care & Specialist Consultation
+
+Itemized Charges:
+- Specialist Diagnostic Consultation: $350.00
+- Neurological Assessment: $250.00
+- Outpatient Acute Medication: $150.00
+
+Total Billed: $750.00
+Amount Paid by Patient: $0.00
+Balance Due: $750.00
+Status: Unpaid / Direct Provider Claim
+

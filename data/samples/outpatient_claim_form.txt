@@ -1,0 +1,10 @@
+UNITEDHEALTHCARE HEALTH CLAIM FORM
+Claimant: Sarah Jenkins
+Policy Number: POL-UHG-001
+Date of Service: 2026-10-20
+Diagnosis: Acute Migraine and Neurological Evaluation
+Provider: Metro Health Clinic
+Total Amount Claimed: $750.00
+Prior Authorization: N/A - Outpatient Urgent Care
+Comments: Urgent diagnostic evaluation, specialist consultation, and urgent care treatment.
+

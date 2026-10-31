@@ -41,7 +41,7 @@ try:
                c.assigned_approver_id, app.name as approver_name
         FROM cases c
         LEFT JOIN staff app ON c.assigned_approver_id = app.staff_id
-        WHERE c.status = 'READY_FOR_APPROVAL'
+        WHERE c.status LIKE 'READY_FOR_APPROVAL%'
         ORDER BY c.created_at DESC;
         """
     )
@@ -59,11 +59,18 @@ case_options = [r["case_id"] for r in pending_rows]
 default_cid = st.session_state.get("selected_approval_case_id", case_options[0])
 idx = case_options.index(default_cid) if default_cid in case_options else 0
 
+def format_approval_case(cid: str) -> str:
+    row = next((r for r in pending_rows if r["case_id"] == cid), None)
+    if not row:
+        return cid
+    rec_tag = " ⚠️ [REJECT RECOMMENDED]" if "REJECTION" in (row.get("status") or "") else ""
+    return f"{cid} - {row['claimant_name']} (${float(row.get('total_amount') or 0.0):,.2f}){rec_tag}"
+
 selected_case_id = st.selectbox(
     "Select Claim Case for Approval",
     options=case_options,
     index=idx,
-    format_func=lambda cid: f"{cid} - {[r['claimant_name'] for r in pending_rows if r['case_id'] == cid][0]} (${float([r['total_amount'] for r in pending_rows if r['case_id'] == cid][0]):,.2f})",
+    format_func=format_approval_case,
 )
 st.session_state["selected_approval_case_id"] = selected_case_id
 
@@ -117,17 +124,29 @@ else:
 # Approver Decision Form
 st.subheader("✍️ Approver Sign-off & Final Disposition")
 
+is_reject_recommended = (
+    "REJECTION" in (case.get("status") or "")
+    or summary.get("next_action") == "REJECT"
+)
+if is_reject_recommended:
+    st.warning("⚠️ **Specialist Recommendation: REJECT** — Procedure classified under policy exclusions.")
+    default_decision_idx = 1  # "REJECTED"
+    default_rationale = "Claim rejected per policy Clause 3.1: Non-covered elective/cosmetic exclusions without prior medical necessity approval."
+else:
+    default_decision_idx = 0  # "APPROVED"
+    default_rationale = "Medical necessity verified against policy inpatient surgical benefits. Charges adhere to allowed fee schedule."
+
 with st.form("approver_decision_form"):
     decision = st.radio(
         "Select Final Disposition",
         options=["APPROVED", "REJECTED", "INFO_REQUESTED"],
-        index=0,
+        index=default_decision_idx,
         help="Select decision to dispatch into LangGraph HITL interrupt resumption.",
     )
 
     rationale = st.text_area(
         "Decision Rationale (Mandatory for Compliance & Audit)",
-        value="Medical necessity verified against policy inpatient surgical benefits. Charges adhere to allowed fee schedule.",
+        value=default_rationale,
         height=100,
     )
 

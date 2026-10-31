@@ -74,7 +74,9 @@ with st.container():
         st.markdown("#### Staff Assignment")
         adj = case.get("adjuster_name") or case.get("assigned_adjuster_id") or "Unassigned"
         app = case.get("approver_name") or case.get("assigned_approver_id") or "Unassigned"
-        st.markdown(f"Adjuster: **{adj}**  \nApprover: **{app}** (Limit: ${case.get('approver_limit', 0):,.2f})")
+        approver_limit = case.get("approver_limit")
+        limit_text = f" (Limit: ${float(approver_limit):,.2f})" if approver_limit is not None else ""
+        st.markdown(f"Adjuster: **{adj}**  \nApprover: **{app}**{limit_text}")
 
 st.markdown("---")
 

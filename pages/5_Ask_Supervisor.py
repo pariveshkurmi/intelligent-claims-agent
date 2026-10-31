@@ -50,7 +50,7 @@ with col_info:
     st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
     st.markdown(
         f"**Claimant:** {active_case.get('claimant_name')} | "
-        f"**Amount:** ${float(active_case.get('total_amount', 0)):,.2f} | "
+        f"**Amount:** ${float(active_case.get('total_amount') or 0.0):,.2f} | "
         f"**Status:** {render_status_badge(active_case.get('status', 'UNKNOWN'))}",
         unsafe_allow_html=True,
     )

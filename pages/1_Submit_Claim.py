@@ -26,7 +26,7 @@ scenario_options = ["-- Select Scenario Preset (Optional) --"] + [
     for p in manifest
 ]
 
-col_scen, col_btn = st.columns([4, 1])
+col_scen, col_load, col_reset = st.columns([3, 1, 1])
 with col_scen:
     selected_preset = st.selectbox(
         "⚡ Quick Test: Load from Golden Dataset (30 Scenarios)",
@@ -36,8 +36,9 @@ with col_scen:
     )
 
 if "form_data" not in st.session_state:
+    fresh_cid = f"CASE-{uuid.uuid4().hex[:6].upper()}"
     st.session_state["form_data"] = {
-        "case_id": f"CASE-{uuid.uuid4().hex[:6].upper()}",
+        "case_id": fresh_cid,
         "policy_id": "POL-UHG-001",
         "claimant_name": "Sarah Jenkins",
         "claimant_email": "sarah.jenkins@example.com",
@@ -61,7 +62,7 @@ if "form_data" not in st.session_state:
         ],
     }
 
-with col_btn:
+with col_load:
     st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
     if st.button("Load Preset", use_container_width=True):
         if selected_preset != scenario_options[0]:
@@ -82,6 +83,37 @@ with col_btn:
                 st.success(f"Loaded scenario '{pack.get('scenario')}' for {cid}!")
                 st.rerun()
 
+with col_reset:
+    st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
+    if st.button("➕ New Custom Claim", use_container_width=True, help="Clear form and generate a brand new custom claim"):
+        fresh_cid = f"CASE-{uuid.uuid4().hex[:6].upper()}"
+        st.session_state["form_data"] = {
+            "case_id": fresh_cid,
+            "policy_id": "POL-UHG-001",
+            "claimant_name": "Sarah Jenkins",
+            "claimant_email": "sarah.jenkins@example.com",
+            "date_of_service": "2026-10-15",
+            "total_amount": 1500.00,
+            "documents": [
+                {
+                    "doc_id": str(uuid.uuid4()),
+                    "doc_type": "claim_form",
+                    "ocr_confidence": 0.98,
+                    "file_path": f"data/{fresh_cid}_claim_form.txt",
+                    "ocr_text": f"UNITEDHEALTHCARE HEALTH CLAIM FORM\nClaimant: Sarah Jenkins\nPolicy: POL-UHG-001\nDiagnosis: Outpatient Evaluation & Treatment\nClaimed: $1500.00\nProvider: City Medical Center",
+                },
+                {
+                    "doc_id": str(uuid.uuid4()),
+                    "doc_type": "itemized_bill",
+                    "ocr_confidence": 0.96,
+                    "file_path": f"data/{fresh_cid}_itemized_bill.txt",
+                    "ocr_text": f"CITY MEDICAL CENTER - ITEMIZED BILL\nPatient: Sarah Jenkins\nTotal Billed: $1500.00\nLine Items:\n- Consultation: $300.00\n- Diagnostic Tests: $700.00\n- Medications: $500.00",
+                },
+            ],
+        }
+        st.success(f"Initialized fresh claim template ({fresh_cid})!")
+        st.rerun()
+
 st.markdown("### 📋 Claim Information")
 
 with st.form("claim_intake_form"):
@@ -94,8 +126,8 @@ with st.form("claim_intake_form"):
     with col2:
         # Load available policies from DB
         try:
-            pol_rows = execute_query("SELECT policy_id, plan_name FROM policies;")
-            pol_options = [r["policy_id"] for r in pol_rows] if pol_rows else ["POL-UHG-001", "POL-UHG-002", "POL-UHG-003"]
+            pol_rows = execute_query("SELECT policy_number, product_name, policyholder_name FROM policies;")
+            pol_options = [r["policy_number"] for r in pol_rows] if pol_rows else ["POL-UHG-001"]
         except Exception:
             pol_options = ["POL-UHG-001", "POL-UHG-002", "POL-UHG-003"]
 
@@ -139,6 +171,30 @@ if submitted:
     progress_bar = st.progress(0, text="Initializing LangGraph execution...")
     status_container = st.container()
 
+    # Collect updated OCR text from the UI text areas
+    final_docs = []
+    for idx, doc in enumerate(cur_docs):
+        doc_copy = dict(doc)
+        edited_text = st.session_state.get(f"doc_text_{idx}")
+        if edited_text is not None and edited_text.strip():
+            doc_copy["ocr_text"] = edited_text
+        final_docs.append(doc_copy)
+
+    # Process any newly uploaded files
+    if uploaded_files:
+        for uf in uploaded_files:
+            try:
+                content = uf.read().decode("utf-8", errors="ignore")
+            except Exception:
+                content = f"Uploaded binary document: {uf.name}"
+            final_docs.append({
+                "doc_id": str(uuid.uuid4()),
+                "doc_type": "itemized_bill" if "bill" in uf.name.lower() else "claim_form",
+                "ocr_confidence": 0.95,
+                "file_path": f"data/{case_id}_{uf.name}",
+                "ocr_text": content,
+            })
+
     initial_state = {
         "case_id": case_id,
         "policy_id": policy_id,
@@ -146,7 +202,7 @@ if submitted:
         "claimant_email": claimant_email,
         "date_of_service": str(date_of_service),
         "total_amount": float(total_amount),
-        "documents": cur_docs,
+        "documents": final_docs,
         "agent_hops": [],
         "stage_results": {},
         "errors": [],

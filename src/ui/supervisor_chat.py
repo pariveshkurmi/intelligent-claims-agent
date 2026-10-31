@@ -88,15 +88,20 @@ def generate_offline_supervisor_reply(case_id: str, prompt: str, case_data: Dict
 
     # Question about approver or routing
     elif "approver" in prompt_lower or "route" in prompt_lower or "tier" in prompt_lower or "adjuster" in prompt_lower:
-        adj = case.get("adjuster_name", case.get("assigned_adjuster_id", "Unassigned"))
-        app = case.get("approver_name", case.get("assigned_approver_id", "Unassigned"))
-        limit = case.get("approver_limit", 2500.0)
+        adj = case.get("adjuster_name") or case.get("assigned_adjuster_id") or "Unassigned"
+        app = case.get("approver_name") or case.get("assigned_approver_id") or "Unassigned"
+        limit = case.get("approver_limit")
+        limit_str = f"${float(limit):,.2f}" if limit is not None else "N/A"
+        if limit is not None:
+            compliance_str = "✅ Within Limit" if amount <= float(limit) else "⚠️ Exceeds Limit - Escalation Required"
+        else:
+            compliance_str = "ℹ️ Pending Approver Assignment"
         return (
             f"**Routing & Staff Assignment for {case_id}:**\n\n"
             f"- **Assigned Adjuster:** {adj}\n"
-            f"- **Assigned Approver:** {app} (Approval Limit: ${limit:,.2f})\n"
+            f"- **Assigned Approver:** {app} (Approval Limit: {limit_str})\n"
             f"- **Claim Total:** ${amount:,.2f}\n"
-            f"- **Golden Rule Compliance:** {'✅ Within Limit' if amount <= limit else '⚠️ Exceeds Limit - Escalation Required'}"
+            f"- **Golden Rule Compliance:** {compliance_str}"
         )
 
     # General fallback
