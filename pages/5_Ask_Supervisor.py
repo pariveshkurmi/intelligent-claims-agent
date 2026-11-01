@@ -7,7 +7,7 @@ st.set_page_config(page_title="Ask Supervisor | UHG Claims Agent", page_icon="�
 from src.db.connection import execute_query
 from src.ui.auth import render_auth_sidebar, get_current_user
 from src.ui.components import render_status_badge
-from src.ui.supervisor_chat import ask_supervisor
+from src.ui.supervisor_chat import ask_supervisor, sanitize_displayed_message
 
 render_auth_sidebar()
 user = get_current_user()
@@ -92,7 +92,7 @@ if history_key not in st.session_state:
 # Display Messages
 for msg in st.session_state[history_key]:
     with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+        st.markdown(sanitize_displayed_message(msg["content"]))
 
 # User Input Handling
 prompt = st.chat_input(f"Ask about case {selected_case_id}...") or quick_prompt
@@ -108,7 +108,7 @@ if prompt:
         stream_gen = ask_supervisor(selected_case_id, prompt)
         full_response = st.write_stream(stream_gen)
 
-    st.session_state[history_key].append({"role": "assistant", "content": full_response})
+    st.session_state[history_key].append({"role": "assistant", "content": sanitize_displayed_message(full_response)})
 
 # Clear Chat History Button
 if st.button("🗑️ Clear Chat History for This Case"):

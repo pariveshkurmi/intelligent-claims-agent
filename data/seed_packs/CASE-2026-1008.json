@@ -7,7 +7,7 @@
   "notes": "Damaged, low-resolution scan with unreadable fields.",
   "documents": [
     {
-      "doc_id": "bf2fdad7-12fa-4e53-b81a-f1686d91af79",
+      "doc_id": "b240ec64-e41a-44e0-8112-3bfe7b5f6ed5",
       "doc_type": "claim_form",
       "ocr_confidence": 0.42,
       "file_path": "data/seed_packs/CASE-2026-1008_poor_scan.txt",

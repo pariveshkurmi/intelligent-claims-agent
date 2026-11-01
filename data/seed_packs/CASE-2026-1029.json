@@ -7,7 +7,7 @@
   "notes": "Unserviced claim exceeding standard 48h turnaround time.",
   "documents": [
     {
-      "doc_id": "28086eb9-fc69-46f9-8bdc-9622a0afcf11",
+      "doc_id": "473073c2-0c70-4090-ad91-04b89021b84b",
       "doc_type": "claim_form",
       "ocr_confidence": 0.97,
       "file_path": "data/seed_packs/CASE-2026-1029_sla_breach.txt",

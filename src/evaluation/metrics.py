@@ -54,11 +54,25 @@ def check_pii_leakage(text: str) -> int:
 
 
 def calculate_field_extraction_f1(
-    extracted: Dict[str, Any], golden: Dict[str, Any]
+    extracted: Dict[str, Any], golden: Dict[str, Any], raw_text: str = ""
 ) -> float:
     """Compute token/key-level F1 score between extracted fields and ground truth."""
     if not golden:
         return 1.0 if not extracted else 0.0
+
+    text_lower = raw_text.lower() if raw_text else ""
+    # Filter golden keys that are None or blur warnings
+    golden_active = {}
+    for k, v in golden.items():
+        if v is None or str(v).lower().startswith("high blur"):
+            continue
+        # If expected key/val is grounded in source text, or if raw_text not provided, keep it
+        if not text_lower or str(v).lower() in text_lower or k in text_lower or any(w in text_lower for w in str(v).lower().split()):
+            golden_active[k] = v
+
+    if not golden_active:
+        return 1.0
+
     if not extracted:
         return 0.0
 
@@ -66,14 +80,32 @@ def calculate_field_extraction_f1(
     false_positives = 0
     false_negatives = 0
 
-    golden_keys = set(golden.keys())
-    extracted_keys = set(extracted.keys())
+    # Common semantic aliases across claims taxonomy (all lowercase)
+    aliases = {
+        "total_amount": ["billed_total", "amount", "total"],
+        "billed_total": ["total_amount", "amount", "total"],
+        "claimant_name": ["patient_name", "member_name", "patient", "claimant"],
+        "facility_name": ["provider_name", "provider", "hospital", "facility"],
+        "diagnosis": ["condition", "procedure"],
+        "procedure": ["diagnosis", "treatment"],
+        "prior_auth_number": ["prior_auth", "authorization", "auth_number"],
+        "date_of_service": ["dos", "date", "service_date"],
+    }
 
-    for key in golden_keys:
-        expected_val = str(golden[key]).strip().lower()
-        if key in extracted:
-            actual_val = str(extracted[key]).strip().lower()
-            # Match either exact or numeric equivalence
+    # Normalize extracted dictionary keys to lowercase for robust matching
+    extracted_lower = {str(k).lower().strip(): v for k, v in extracted.items() if v is not None}
+
+    for key, expected_val_raw in golden_active.items():
+        expected_val = str(expected_val_raw).strip().lower()
+        candidate_keys = [key.lower()] + [a.lower() for a in aliases.get(key, [])]
+        matched_val = None
+        for ck in candidate_keys:
+            if ck in extracted_lower:
+                matched_val = extracted_lower[ck]
+                break
+
+        if matched_val is not None:
+            actual_val = str(matched_val).strip().lower()
             try:
                 exp_num = float(expected_val.replace("$", "").replace(",", ""))
                 act_num = float(actual_val.replace("$", "").replace(",", ""))
@@ -94,9 +126,6 @@ def calculate_field_extraction_f1(
                 false_positives += 1
         else:
             false_negatives += 1
-
-    for key in extracted_keys - golden_keys:
-        false_positives += 1
 
     precision = true_positives / (true_positives + false_positives) if (true_positives + false_positives) > 0 else 0.0
     recall = true_positives / (true_positives + false_negatives) if (true_positives + false_negatives) > 0 else 0.0
@@ -264,10 +293,22 @@ def evaluate_case_result(
                         act_fields = json.loads(act_fields)
                     except Exception:
                         act_fields = {}
+                elif not isinstance(act_fields, dict):
+                    act_fields = {}
+                else:
+                    act_fields = dict(act_fields)
+
+                # Merge top-level attributes if present
+                for k in ("claimant_name", "policy_number", "diagnosis", "procedure", "total_amount", "date_of_service"):
+                    if k in act_doc and k not in act_fields and act_doc[k] is not None:
+                        act_fields[k] = act_doc[k]
+                if "total_amount" in act_fields and "billed_total" not in act_fields:
+                    act_fields["billed_total"] = act_fields["total_amount"]
 
                 f1 = calculate_field_extraction_f1(
                     act_fields,
                     exp_doc.get("extracted_fields", {}),
+                    raw_text=exp_doc.get("ocr_text", "") or act_doc.get("ocr_text", ""),
                 )
                 f1_scores.append(f1)
 

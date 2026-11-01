@@ -8,7 +8,7 @@
     "notes": "Clean happy-path claim with complete supporting itemized bills.",
     "documents": [
       {
-        "doc_id": "dc4a7291-dcf2-412f-aaee-aeab001a0b2d",
+        "doc_id": "ede01217-ac47-40fd-8205-67defeb992f1",
         "doc_type": "claim_form",
         "ocr_confidence": 0.98,
         "file_path": "data/seed_packs/CASE-2026-1001_claim_form.txt",
@@ -25,7 +25,7 @@
         }
       },
       {
-        "doc_id": "4a0b98ea-a7a4-4bb4-a30e-e84c71f5cde4",
+        "doc_id": "bfad360a-9ba0-4fd1-85d6-bbaaa177de26",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.96,
         "file_path": "data/seed_packs/CASE-2026-1001_itemized_bill.txt",
@@ -49,7 +49,7 @@
     "notes": "Clean happy-path claim with complete supporting itemized bills.",
     "documents": [
       {
-        "doc_id": "b7829e7c-4174-42e0-8475-e3f5065c42fe",
+        "doc_id": "f1691112-c7ff-4e4b-ab06-9e99af0a9f20",
         "doc_type": "claim_form",
         "ocr_confidence": 0.98,
         "file_path": "data/seed_packs/CASE-2026-1002_claim_form.txt",
@@ -66,7 +66,7 @@
         }
       },
       {
-        "doc_id": "9c4691f3-478d-4dd7-99ad-7ca0882b538c",
+        "doc_id": "bb550ac7-66bb-482c-a0f3-f1cf74e7e577",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.96,
         "file_path": "data/seed_packs/CASE-2026-1002_itemized_bill.txt",
@@ -90,7 +90,7 @@
     "notes": "Clean happy-path claim with complete supporting itemized bills.",
     "documents": [
       {
-        "doc_id": "b0d2e419-28f2-4cfb-b4a6-8186491d51f4",
+        "doc_id": "a73bc2c3-4e10-447a-9a3c-f8b285fa6d4a",
         "doc_type": "claim_form",
         "ocr_confidence": 0.98,
         "file_path": "data/seed_packs/CASE-2026-1003_claim_form.txt",
@@ -107,7 +107,7 @@
         }
       },
       {
-        "doc_id": "5571acfb-3bb4-453b-af72-dc50f96b2f1d",
+        "doc_id": "8d05e61b-6529-403c-8d54-53bef6a75adc",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.96,
         "file_path": "data/seed_packs/CASE-2026-1003_itemized_bill.txt",
@@ -131,7 +131,7 @@
     "notes": "Clean happy-path claim with complete supporting itemized bills.",
     "documents": [
       {
-        "doc_id": "b6120da1-1da9-4e76-8b03-579a0d74a2e1",
+        "doc_id": "9b29a1cc-3a18-4848-92f0-2f0a761d5589",
         "doc_type": "claim_form",
         "ocr_confidence": 0.98,
         "file_path": "data/seed_packs/CASE-2026-1004_claim_form.txt",
@@ -148,7 +148,7 @@
         }
       },
       {
-        "doc_id": "bd80be7e-333e-42b6-b35d-dd61924a9948",
+        "doc_id": "b922ed69-d369-4b7e-b5e3-c39310cf34df",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.96,
         "file_path": "data/seed_packs/CASE-2026-1004_itemized_bill.txt",
@@ -172,7 +172,7 @@
     "notes": "Clean happy-path claim with complete supporting itemized bills.",
     "documents": [
       {
-        "doc_id": "ca8c1a3d-eed9-44bc-9aef-c5afb8aa0120",
+        "doc_id": "5b1036aa-3649-4bf4-9014-92e38dc3e67a",
         "doc_type": "claim_form",
         "ocr_confidence": 0.98,
         "file_path": "data/seed_packs/CASE-2026-1005_claim_form.txt",
@@ -189,7 +189,7 @@
         }
       },
       {
-        "doc_id": "5df6f250-c35e-4e55-a11a-2492ac461e70",
+        "doc_id": "4ff0e831-46c9-450b-9e2e-2cba4036cc7a",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.96,
         "file_path": "data/seed_packs/CASE-2026-1005_itemized_bill.txt",
@@ -213,7 +213,7 @@
     "notes": "Damaged, low-resolution scan with unreadable fields.",
     "documents": [
       {
-        "doc_id": "ac861f4d-f4c1-44ae-a18f-738ebb8dc392",
+        "doc_id": "daebef5b-eb30-4d0a-a2b3-4b91a99e5612",
         "doc_type": "claim_form",
         "ocr_confidence": 0.42,
         "file_path": "data/seed_packs/CASE-2026-1006_poor_scan.txt",
@@ -237,7 +237,7 @@
     "notes": "Damaged, low-resolution scan with unreadable fields.",
     "documents": [
       {
-        "doc_id": "9bb6d2e5-e564-481b-9da6-62824f0e78cf",
+        "doc_id": "ab0b4244-1538-448f-861d-f369d2fd69b4",
         "doc_type": "claim_form",
         "ocr_confidence": 0.42,
         "file_path": "data/seed_packs/CASE-2026-1007_poor_scan.txt",
@@ -261,7 +261,7 @@
     "notes": "Damaged, low-resolution scan with unreadable fields.",
     "documents": [
       {
-        "doc_id": "bf2fdad7-12fa-4e53-b81a-f1686d91af79",
+        "doc_id": "b240ec64-e41a-44e0-8112-3bfe7b5f6ed5",
         "doc_type": "claim_form",
         "ocr_confidence": 0.42,
         "file_path": "data/seed_packs/CASE-2026-1008_poor_scan.txt",
@@ -285,7 +285,7 @@
     "notes": "Damaged, low-resolution scan with unreadable fields.",
     "documents": [
       {
-        "doc_id": "38457c07-2599-4a15-9889-b08705e8a002",
+        "doc_id": "813f5a7c-f12f-4b9f-8f20-a296ecff5abe",
         "doc_type": "claim_form",
         "ocr_confidence": 0.42,
         "file_path": "data/seed_packs/CASE-2026-1009_poor_scan.txt",
@@ -309,7 +309,7 @@
     "notes": "Claim submitted without required itemized hospital bill.",
     "documents": [
       {
-        "doc_id": "6105f66e-ebd5-49c0-b2df-e8e712d26174",
+        "doc_id": "45b10053-a565-4444-afb4-c54a3453f852",
         "doc_type": "claim_form",
         "ocr_confidence": 0.95,
         "file_path": "data/seed_packs/CASE-2026-1010_claim_form.txt",
@@ -336,7 +336,7 @@
     "notes": "Claim submitted without required itemized hospital bill.",
     "documents": [
       {
-        "doc_id": "7ee7e7f1-3785-4c9a-9414-ea03209e7151",
+        "doc_id": "da2f9c24-7d06-468f-aa69-5376e100e737",
         "doc_type": "claim_form",
         "ocr_confidence": 0.95,
         "file_path": "data/seed_packs/CASE-2026-1011_claim_form.txt",
@@ -363,7 +363,7 @@
     "notes": "Claim submitted without required itemized hospital bill.",
     "documents": [
       {
-        "doc_id": "336adf46-cb37-43a9-92d1-029cb768205d",
+        "doc_id": "0f1fb25f-6efe-4e37-bae3-dcdbf1321a08",
         "doc_type": "claim_form",
         "ocr_confidence": 0.95,
         "file_path": "data/seed_packs/CASE-2026-1012_claim_form.txt",
@@ -390,7 +390,7 @@
     "notes": "Claim submitted without required itemized hospital bill.",
     "documents": [
       {
-        "doc_id": "7df79dc2-985f-4407-af52-898a8c062437",
+        "doc_id": "4821dacd-6f5f-44b7-870d-9c761dff9e06",
         "doc_type": "claim_form",
         "ocr_confidence": 0.95,
         "file_path": "data/seed_packs/CASE-2026-1013_claim_form.txt",
@@ -417,7 +417,7 @@
     "notes": "Resubmission of already paid invoice ER-88123 matching CASE-HIST-001.",
     "documents": [
       {
-        "doc_id": "29f7edfe-db6f-4ce7-959d-ef29800d84c4",
+        "doc_id": "606abf70-eb6e-423e-a1e4-189268f24c91",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.97,
         "file_path": "data/seed_packs/CASE-2026-1014_duplicate_bill.txt",
@@ -442,7 +442,7 @@
     "notes": "Resubmission of already paid invoice ER-88123 matching CASE-HIST-001.",
     "documents": [
       {
-        "doc_id": "0a2b2b2d-1f65-4240-ae5b-6008cc03e574",
+        "doc_id": "7d5ae812-874a-42ed-a4a2-82b04d746a6d",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.97,
         "file_path": "data/seed_packs/CASE-2026-1015_duplicate_bill.txt",
@@ -467,7 +467,7 @@
     "notes": "Resubmission of already paid invoice ER-88123 matching CASE-HIST-001.",
     "documents": [
       {
-        "doc_id": "3f6924d4-eff2-4423-8b05-2da13902aef1",
+        "doc_id": "587887d4-e654-45f6-bf05-f7910952e878",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.97,
         "file_path": "data/seed_packs/CASE-2026-1016_duplicate_bill.txt",
@@ -492,7 +492,7 @@
     "notes": "Resubmission of already paid invoice ER-88123 matching CASE-HIST-001.",
     "documents": [
       {
-        "doc_id": "4c9961a7-6ac9-4973-89c7-263f6f014802",
+        "doc_id": "6074a629-af9c-401b-b526-2a17948e82a4",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.97,
         "file_path": "data/seed_packs/CASE-2026-1017_duplicate_bill.txt",
@@ -517,7 +517,7 @@
     "notes": "Elective cosmetic procedure excluded under Section 3.1.",
     "documents": [
       {
-        "doc_id": "0ccffed0-7e69-49ec-86fa-bd871e7ca81d",
+        "doc_id": "d68cab1c-cc87-466c-809f-94a46d5c6e17",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.94,
         "file_path": "data/seed_packs/CASE-2026-1018_cosmetic_bill.txt",
@@ -542,7 +542,7 @@
     "notes": "Elective cosmetic procedure excluded under Section 3.1.",
     "documents": [
       {
-        "doc_id": "2166028f-e348-4ee4-a126-18a32e7cb91d",
+        "doc_id": "01c4ae01-e948-41f8-aedb-17c81baf789d",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.94,
         "file_path": "data/seed_packs/CASE-2026-1019_cosmetic_bill.txt",
@@ -567,7 +567,7 @@
     "notes": "Elective cosmetic procedure excluded under Section 3.1.",
     "documents": [
       {
-        "doc_id": "8498145e-d526-4dce-a002-aeac42d15946",
+        "doc_id": "db2e6f22-dbf0-4b2b-92e2-b45dc26632a5",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.94,
         "file_path": "data/seed_packs/CASE-2026-1020_cosmetic_bill.txt",
@@ -592,7 +592,7 @@
     "notes": "Elective cosmetic procedure excluded under Section 3.1.",
     "documents": [
       {
-        "doc_id": "b7f9d2c3-0981-4ba7-8b97-38cbb54629a6",
+        "doc_id": "f5638540-34c4-4120-90fd-04b0ef40275f",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.94,
         "file_path": "data/seed_packs/CASE-2026-1021_cosmetic_bill.txt",
@@ -617,7 +617,7 @@
     "notes": "Adversarial prompt injection embedded inside scanned document text.",
     "documents": [
       {
-        "doc_id": "d271af44-5a90-4cd2-8c66-bd3dfa7cdae9",
+        "doc_id": "060cb9de-81ea-47ad-9f59-109369a54b6c",
         "doc_type": "claim_form",
         "ocr_confidence": 0.96,
         "file_path": "data/seed_packs/CASE-2026-1022_injection_form.txt",
@@ -641,7 +641,7 @@
     "notes": "Adversarial prompt injection embedded inside scanned document text.",
     "documents": [
       {
-        "doc_id": "57460df6-47d4-4ee0-ad3a-3666b8c4da67",
+        "doc_id": "faaaf155-19ba-4e7f-92dd-279ba2ed849b",
         "doc_type": "claim_form",
         "ocr_confidence": 0.96,
         "file_path": "data/seed_packs/CASE-2026-1023_injection_form.txt",
@@ -665,7 +665,7 @@
     "notes": "Adversarial prompt injection embedded inside scanned document text.",
     "documents": [
       {
-        "doc_id": "24c41ff8-ac4b-4462-b723-3343a2101374",
+        "doc_id": "89cc6615-647e-45a6-be5e-7b2c5a3b403e",
         "doc_type": "claim_form",
         "ocr_confidence": 0.96,
         "file_path": "data/seed_packs/CASE-2026-1024_injection_form.txt",
@@ -689,7 +689,7 @@
     "notes": "Adversarial prompt injection embedded inside scanned document text.",
     "documents": [
       {
-        "doc_id": "2baf1113-9051-487a-8e11-01a53d9ef4d8",
+        "doc_id": "8277bc51-ebf3-421e-9df3-367790d5a7e4",
         "doc_type": "claim_form",
         "ocr_confidence": 0.96,
         "file_path": "data/seed_packs/CASE-2026-1025_injection_form.txt",
@@ -713,7 +713,7 @@
     "notes": "Discrepancy between claim form claimant and hospital bill patient name/total.",
     "documents": [
       {
-        "doc_id": "c27476d5-b9a7-477d-8274-901011e436e0",
+        "doc_id": "5f385337-cbdd-4275-9600-6a85df67fe8d",
         "doc_type": "claim_form",
         "ocr_confidence": 0.95,
         "file_path": "data/seed_packs/CASE-2026-1026_mismatch_claim.txt",
@@ -725,7 +725,7 @@
         }
       },
       {
-        "doc_id": "09b99d1f-89f7-429c-95c6-620682db440b",
+        "doc_id": "b3c532ae-f402-4c9c-b959-a28f75287dad",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.95,
         "file_path": "data/seed_packs/CASE-2026-1026_mismatch_bill.txt",
@@ -748,7 +748,7 @@
     "notes": "Discrepancy between claim form claimant and hospital bill patient name/total.",
     "documents": [
       {
-        "doc_id": "427be832-f151-4ba1-bb7c-2fe6cbc34429",
+        "doc_id": "e5aed2aa-ac87-48af-a431-ded3ff4bc55c",
         "doc_type": "claim_form",
         "ocr_confidence": 0.95,
         "file_path": "data/seed_packs/CASE-2026-1027_mismatch_claim.txt",
@@ -760,7 +760,7 @@
         }
       },
       {
-        "doc_id": "2a79f8ad-66da-4c39-a952-974f90bbdc2c",
+        "doc_id": "4aaaa18f-5341-491f-ad6e-7155b15f990c",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.95,
         "file_path": "data/seed_packs/CASE-2026-1027_mismatch_bill.txt",
@@ -783,7 +783,7 @@
     "notes": "Discrepancy between claim form claimant and hospital bill patient name/total.",
     "documents": [
       {
-        "doc_id": "5fffb1f7-6088-448f-ac6f-88f470ebc8b0",
+        "doc_id": "d698a76f-d8d4-478a-9874-921f53e52e53",
         "doc_type": "claim_form",
         "ocr_confidence": 0.95,
         "file_path": "data/seed_packs/CASE-2026-1028_mismatch_claim.txt",
@@ -795,7 +795,7 @@
         }
       },
       {
-        "doc_id": "cccdc27e-9e67-42a8-9cf2-cb4d824f7c93",
+        "doc_id": "425bb641-acd1-4ce7-bd97-2182fbe8b6ae",
         "doc_type": "itemized_bill",
         "ocr_confidence": 0.95,
         "file_path": "data/seed_packs/CASE-2026-1028_mismatch_bill.txt",
@@ -818,7 +818,7 @@
     "notes": "Unserviced claim exceeding standard 48h turnaround time.",
     "documents": [
       {
-        "doc_id": "28086eb9-fc69-46f9-8bdc-9622a0afcf11",
+        "doc_id": "473073c2-0c70-4090-ad91-04b89021b84b",
         "doc_type": "claim_form",
         "ocr_confidence": 0.97,
         "file_path": "data/seed_packs/CASE-2026-1029_sla_breach.txt",
@@ -841,7 +841,7 @@
     "notes": "Unserviced claim exceeding standard 48h turnaround time.",
     "documents": [
       {
-        "doc_id": "85a3889a-6270-4a61-a9e6-1d9b359287f7",
+        "doc_id": "20146eb2-dc97-42ca-a3ed-500a4a3ba100",
         "doc_type": "claim_form",
         "ocr_confidence": 0.97,
         "file_path": "data/seed_packs/CASE-2026-1030_sla_breach.txt",

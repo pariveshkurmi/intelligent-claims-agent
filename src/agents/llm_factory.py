@@ -340,7 +340,9 @@ def get_llm(model_size: str = "small") -> BaseChatModel:
 
     # Live Gemini Provider
     from langchain_google_genai import ChatGoogleGenerativeAI
-    model_name = "gemini-2.5-flash" if model_size == "small" else "gemini-2.5-pro"
+    model_small = os.getenv("GEMINI_MODEL_SMALL", "gemini-2.5-flash")
+    model_large = os.getenv("GEMINI_MODEL_LARGE", "gemini-pro-latest")
+    model_name = model_small if model_size in ("small", "fast") else model_large
     return ChatGoogleGenerativeAI(
         model=model_name,
         google_api_key=gemini_key,

@@ -7,7 +7,7 @@
   "notes": "Clean happy-path claim with complete supporting itemized bills.",
   "documents": [
     {
-      "doc_id": "ca8c1a3d-eed9-44bc-9aef-c5afb8aa0120",
+      "doc_id": "5b1036aa-3649-4bf4-9014-92e38dc3e67a",
       "doc_type": "claim_form",
       "ocr_confidence": 0.98,
       "file_path": "data/seed_packs/CASE-2026-1005_claim_form.txt",
@@ -24,7 +24,7 @@
       }
     },
     {
-      "doc_id": "5df6f250-c35e-4e55-a11a-2492ac461e70",
+      "doc_id": "4ff0e831-46c9-450b-9e2e-2cba4036cc7a",
       "doc_type": "itemized_bill",
       "ocr_confidence": 0.96,
       "file_path": "data/seed_packs/CASE-2026-1005_itemized_bill.txt",

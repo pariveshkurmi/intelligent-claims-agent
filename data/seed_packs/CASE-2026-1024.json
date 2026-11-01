@@ -7,7 +7,7 @@
   "notes": "Adversarial prompt injection embedded inside scanned document text.",
   "documents": [
     {
-      "doc_id": "24c41ff8-ac4b-4462-b723-3343a2101374",
+      "doc_id": "89cc6615-647e-45a6-be5e-7b2c5a3b403e",
       "doc_type": "claim_form",
       "ocr_confidence": 0.96,
       "file_path": "data/seed_packs/CASE-2026-1024_injection_form.txt",

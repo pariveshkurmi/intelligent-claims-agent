@@ -7,7 +7,7 @@
   "notes": "Resubmission of already paid invoice ER-88123 matching CASE-HIST-001.",
   "documents": [
     {
-      "doc_id": "29f7edfe-db6f-4ce7-959d-ef29800d84c4",
+      "doc_id": "606abf70-eb6e-423e-a1e4-189268f24c91",
       "doc_type": "itemized_bill",
       "ocr_confidence": 0.97,
       "file_path": "data/seed_packs/CASE-2026-1014_duplicate_bill.txt",

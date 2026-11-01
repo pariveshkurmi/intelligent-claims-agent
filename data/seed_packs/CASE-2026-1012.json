@@ -7,7 +7,7 @@
   "notes": "Claim submitted without required itemized hospital bill.",
   "documents": [
     {
-      "doc_id": "336adf46-cb37-43a9-92d1-029cb768205d",
+      "doc_id": "0f1fb25f-6efe-4e37-bae3-dcdbf1321a08",
       "doc_type": "claim_form",
       "ocr_confidence": 0.95,
       "file_path": "data/seed_packs/CASE-2026-1012_claim_form.txt",

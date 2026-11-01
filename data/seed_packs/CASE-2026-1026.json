@@ -7,7 +7,7 @@
   "notes": "Discrepancy between claim form claimant and hospital bill patient name/total.",
   "documents": [
     {
-      "doc_id": "c27476d5-b9a7-477d-8274-901011e436e0",
+      "doc_id": "5f385337-cbdd-4275-9600-6a85df67fe8d",
       "doc_type": "claim_form",
       "ocr_confidence": 0.95,
       "file_path": "data/seed_packs/CASE-2026-1026_mismatch_claim.txt",
@@ -19,7 +19,7 @@
       }
     },
     {
-      "doc_id": "09b99d1f-89f7-429c-95c6-620682db440b",
+      "doc_id": "b3c532ae-f402-4c9c-b959-a28f75287dad",
       "doc_type": "itemized_bill",
       "ocr_confidence": 0.95,
       "file_path": "data/seed_packs/CASE-2026-1026_mismatch_bill.txt",

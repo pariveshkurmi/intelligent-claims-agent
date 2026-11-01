@@ -84,6 +84,70 @@ class DocumentAgent:
         if cls_info.get("doc_type") and cls_info.get("doc_type") != "other":
             extraction.doc_type = cls_info["doc_type"]
 
+        # Consolidate structured fields into extracted_fields dictionary
+        fields = dict(extraction.extracted_fields or {})
+        if extraction.claimant_name:
+            fields["claimant_name"] = extraction.claimant_name
+        if extraction.policy_number:
+            fields["policy_number"] = extraction.policy_number
+        if extraction.date_of_service:
+            fields["date_of_service"] = extraction.date_of_service
+        if extraction.total_amount:
+            fields["total_amount"] = extraction.total_amount
+            fields["billed_total"] = extraction.total_amount
+        if extraction.diagnosis:
+            fields["diagnosis"] = extraction.diagnosis
+        if extraction.procedure:
+            fields["procedure"] = extraction.procedure
+
+        # Regex fallback for domain fields
+        import re
+        if "total_amount" not in fields or fields.get("total_amount") == 0.0:
+            amt_match = re.search(r"(?:Total(?:\s+Billed|\s+Claimed)?|Claimed|Amount|Total):\s*\$?([0-9,]+(?:\.[0-9]{2})?)", raw_text, re.IGNORECASE)
+            if amt_match:
+                try:
+                    val = float(amt_match.group(1).replace(",", ""))
+                    fields["total_amount"] = val
+                    fields["billed_total"] = val
+                    if not extraction.total_amount:
+                        extraction.total_amount = val
+                except ValueError:
+                    pass
+
+        if "facility_name" not in fields:
+            fac_match = re.search(r"(?:Facility|Hospital|Provider):\s*([^\n\r]+)", raw_text, re.IGNORECASE)
+            if fac_match:
+                fields["facility_name"] = fac_match.group(1).strip()
+            else:
+                first_line = raw_text.strip().split("\n")[0]
+                if " - " in first_line:
+                    header_cand = first_line.split(" - ")[0].strip()
+                    if any(w in header_cand.lower() for w in ("hospital", "clinic", "center", "health", "medical")):
+                        fields["facility_name"] = header_cand.title()
+
+        if "prior_auth_number" not in fields:
+            pa_match = re.search(r"(?:Prior\s+Auth|Authorization):\s*([A-Za-z0-9-]+)", raw_text, re.IGNORECASE)
+            if pa_match:
+                fields["prior_auth_number"] = pa_match.group(1).strip()
+            elif "pa-" in raw_text.lower():
+                pa_cand = re.search(r"\b(PA-[0-9A-Za-z-]+)\b", raw_text, re.IGNORECASE)
+                if pa_cand:
+                    fields["prior_auth_number"] = pa_cand.group(1).strip()
+
+        if "date_of_service" not in fields or not fields.get("date_of_service"):
+            dos_match = re.search(r"(?:Date of Service|DOS|Date):\s*([0-9-]+)", raw_text, re.IGNORECASE)
+            if dos_match:
+                fields["date_of_service"] = dos_match.group(1).strip()
+            elif "2026-" in raw_text:
+                d_match = re.search(r"\b(2026-[0-9]{2}-[0-9]{2})\b", raw_text)
+                if d_match:
+                    fields["date_of_service"] = d_match.group(1)
+
+        if extraction.doc_type == "itemized_bill" and "paid_by_patient" not in fields:
+            fields["paid_by_patient"] = 0.0
+
+        extraction.extracted_fields = fields
+
         # 3. Synchronize extracted state back to PostgreSQL if valid UUID doc_id exists
         if _is_valid_uuid(doc_id):
             execute_mutation(
