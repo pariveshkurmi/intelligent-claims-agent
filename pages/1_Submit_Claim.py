@@ -26,7 +26,7 @@ scenario_options = ["-- Select Scenario Preset (Optional) --"] + [
     for p in manifest
 ]
 
-col_scen, col_load, col_reset = st.columns([3, 1, 1])
+col_scen, col_load, col_reset, col_clear = st.columns([3, 1, 1, 1])
 with col_scen:
     selected_preset = st.selectbox(
         "⚡ Quick Test: Load from Golden Dataset (30 Scenarios)",
@@ -85,7 +85,7 @@ with col_load:
 
 with col_reset:
     st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
-    if st.button("➕ New Custom Claim", use_container_width=True, help="Clear form and generate a brand new custom claim"):
+    if st.button("➕ Sample Claim", use_container_width=True, help="Reset form with standard sample claim template"):
         fresh_cid = f"CASE-{uuid.uuid4().hex[:6].upper()}"
         st.session_state["form_data"] = {
             "case_id": fresh_cid,
@@ -112,6 +112,22 @@ with col_reset:
             ],
         }
         st.success(f"Initialized fresh claim template ({fresh_cid})!")
+        st.rerun()
+
+with col_clear:
+    st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
+    if st.button("🗑️ Blank Canvas", use_container_width=True, help="Clear all preloaded documents so you can paste fresh test data or upload .txt files"):
+        fresh_cid = f"CASE-{uuid.uuid4().hex[:6].upper()}"
+        st.session_state["form_data"] = {
+            "case_id": fresh_cid,
+            "policy_id": "POL-UHG-001",
+            "claimant_name": "",
+            "claimant_email": "",
+            "date_of_service": "2026-10-15",
+            "total_amount": 0.0,
+            "documents": [],
+        }
+        st.success("Cleared all preloaded documents! Ready for fresh test data paste or drag-and-drop upload.")
         st.rerun()
 
 st.markdown("### 📋 Claim Information")
@@ -156,11 +172,18 @@ with st.form("claim_intake_form"):
 
     # Document upload
     uploaded_files = st.file_uploader(
-        "Add additional documents (Drag and Drop PDF, TXT, or Images)",
+        "Add / Upload Supporting Documents (.txt, .pdf, or images)",
         accept_multiple_files=True,
     )
+    replace_with_uploaded = True
     if uploaded_files:
         st.info(f"{len(uploaded_files)} file(s) queued for ingestion.")
+        if cur_docs:
+            replace_with_uploaded = st.checkbox(
+                "Use uploaded files only (ignore preloaded template documents)",
+                value=True,
+                help="When checked, only your newly uploaded files will be sent to the agents, ignoring default sample documents."
+            )
 
     submitted = st.form_submit_button("🚀 Submit Claim & Launch Agent Workflow", use_container_width=True, type="primary")
 
@@ -171,14 +194,15 @@ if submitted:
     progress_bar = st.progress(0, text="Initializing LangGraph execution...")
     status_container = st.container()
 
-    # Collect updated OCR text from the UI text areas
+    # Collect updated OCR text from the UI text areas (unless user wants uploaded files only)
     final_docs = []
-    for idx, doc in enumerate(cur_docs):
-        doc_copy = dict(doc)
-        edited_text = st.session_state.get(f"doc_text_{idx}")
-        if edited_text is not None and edited_text.strip():
-            doc_copy["ocr_text"] = edited_text
-        final_docs.append(doc_copy)
+    if not (uploaded_files and replace_with_uploaded):
+        for idx, doc in enumerate(cur_docs):
+            doc_copy = dict(doc)
+            edited_text = st.session_state.get(f"doc_text_{idx}")
+            if edited_text is not None and edited_text.strip():
+                doc_copy["ocr_text"] = edited_text
+            final_docs.append(doc_copy)
 
     # Process any newly uploaded files
     if uploaded_files:
@@ -187,12 +211,34 @@ if submitted:
                 content = uf.read().decode("utf-8", errors="ignore")
             except Exception:
                 content = f"Uploaded binary document: {uf.name}"
+
+            # Auto-detect OCR confidence & injection flags from file metadata and content
+            ocr_conf = 0.95
+            if any(k in uf.name.lower() for k in ("poor", "scan", "blur", "damaged")):
+                ocr_conf = 0.42
+            elif "[ocr confidence:" in content.lower():
+                import re
+                m = re.search(r"\[ocr confidence:\s*([0-9.]+)", content, re.IGNORECASE)
+                if m:
+                    try:
+                        ocr_conf = float(m.group(1))
+                    except ValueError:
+                        pass
+
+            is_inj = any(k in content.lower() for k in (
+                "system override instruction",
+                "ignore all previous policy rules",
+                "attention ai agent",
+                "set total amount to"
+            ))
+
             final_docs.append({
                 "doc_id": str(uuid.uuid4()),
                 "doc_type": "itemized_bill" if "bill" in uf.name.lower() else "claim_form",
-                "ocr_confidence": 0.95,
+                "ocr_confidence": ocr_conf,
                 "file_path": f"data/{case_id}_{uf.name}",
                 "ocr_text": content,
+                "is_injection_flagged": is_inj,
             })
 
     initial_state = {
