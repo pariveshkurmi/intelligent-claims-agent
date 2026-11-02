@@ -55,7 +55,7 @@ def init_tracing(
             project_name=target_project,
             endpoint=target_endpoint,
             protocol="http/protobuf",
-            batch=False,
+            batch=True,
             verbose=False,
             set_global_tracer_provider=True,
         )
@@ -107,7 +107,9 @@ def trace_agent_hop(
         return
 
     span_name = f"agent.{agent_name}"
-    with tracer.start_as_current_span(span_name) as span:
+    with tracer.start_as_current_span(
+        span_name, record_exception=False, set_status_on_exception=False
+    ) as span:
         try:
             span.set_attribute("agent.name", agent_name)
             span.set_attribute("case.id", case_id)
@@ -118,7 +120,21 @@ def trace_agent_hop(
                     span.set_attribute(f"agent.metadata.{k}", str(v))
         except Exception:
             pass
-        yield span
+
+        try:
+            yield span
+        except Exception as exc:
+            from opentelemetry.trace import Status, StatusCode
+            exc_name = type(exc).__name__
+            # GraphInterrupt is LangGraph's intentional pause mechanism for Human-in-the-Loop gates
+            if "Interrupt" in exc_name or "GraphInterrupt" in exc_name:
+                span.set_attribute("hitl.interrupted", True)
+                span.set_attribute("hitl.status", "AWAITING_HUMAN_DECISION")
+                span.set_status(Status(StatusCode.OK))
+            else:
+                span.record_exception(exc)
+                span.set_status(Status(StatusCode.ERROR, str(exc)))
+            raise
 
 
 @contextmanager
