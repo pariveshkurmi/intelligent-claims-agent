@@ -17,9 +17,24 @@ from src.orchestration.state import ClaimState, DocumentWorkerInput
 from src.mcp_servers.case_mcp import register_case
 from src.mcp_servers.documents_mcp import validate_case_documents, extract_text, list_documents
 from src.mcp_servers.workflow_mcp import get_workload, _send_email_via_mailpit
+import functools
 from src.utils.audit import log_audit_event
+from src.utils.tracing import trace_agent_hop
 
 
+def traced_node(agent_name: str, stage: Optional[str] = None):
+    """Decorator to trace discrete LangGraph node executions as Phoenix OpenTelemetry spans."""
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(arg, *args, **kwargs):
+            case_id = arg.get("case_id", "UNKNOWN") if isinstance(arg, dict) else "UNKNOWN"
+            with trace_agent_hop(agent_name, case_id, stage=stage or agent_name):
+                return func(arg, *args, **kwargs)
+        return wrapper
+    return decorator
+
+
+@traced_node("intake_agent", stage="intake")
 def intake_node(state: ClaimState) -> Dict[str, Any]:
     """Execute Intake Specialist: Verify coverage and check for duplicate claims."""
     case_id = state["case_id"]
@@ -98,6 +113,7 @@ def intake_node(state: ClaimState) -> Dict[str, Any]:
         }
 
 
+@traced_node("document_worker", stage="document_worker")
 def document_worker_node(payload: DocumentWorkerInput) -> Dict[str, Any]:
     """Execute Document Specialist on a single document in parallel (Send fan-out worker)."""
     case_id = payload["case_id"]
@@ -146,6 +162,7 @@ def document_worker_node(payload: DocumentWorkerInput) -> Dict[str, Any]:
         }
 
 
+@traced_node("document_join", stage="document_join")
 def document_join_node(state: ClaimState) -> Dict[str, Any]:
     """Gather parallel extraction results, run validation, and assess quality/security flags."""
     case_id = state["case_id"]
@@ -216,6 +233,7 @@ def document_join_node(state: ClaimState) -> Dict[str, Any]:
     }
 
 
+@traced_node("summary_agent", stage="summary")
 def summary_node(state: ClaimState) -> Dict[str, Any]:
     """Execute Summary Specialist: Synthesize evidence, policy citations, and risks."""
     case_id = state["case_id"]
@@ -263,6 +281,7 @@ def summary_node(state: ClaimState) -> Dict[str, Any]:
         }
 
 
+@traced_node("routing_agent", stage="routing")
 def routing_node(state: ClaimState) -> Dict[str, Any]:
     """Execute Routing Specialist: Match adjuster workload, assign approver tier, and queue request."""
     case_id = state["case_id"]
@@ -295,6 +314,7 @@ def routing_node(state: ClaimState) -> Dict[str, Any]:
         }
 
 
+@traced_node("sla_agent", stage="sla")
 def sla_node(state: ClaimState) -> Dict[str, Any]:
     """Execute SLA & Comms Specialist: Schedule SLA monitoring timer and dispatch approver brief."""
     case_id = state["case_id"]
@@ -386,6 +406,7 @@ def sla_node(state: ClaimState) -> Dict[str, Any]:
         }
 
 
+@traced_node("human_review", stage="hitl")
 def human_review_node(state: ClaimState) -> Dict[str, Any]:
     """Golden Rule Human Pause Node: Interrupt execution awaiting human sign-off."""
     case_id = state["case_id"]
@@ -431,6 +452,7 @@ def human_review_node(state: ClaimState) -> Dict[str, Any]:
     }
 
 
+@traced_node("await_documents", stage="missing_docs")
 def await_documents_node(state: ClaimState) -> Dict[str, Any]:
     """Missing Documents Pause Node: Email claimant via Mailpit and pause for uploads."""
     case_id = state["case_id"]
@@ -493,6 +515,7 @@ def await_documents_node(state: ClaimState) -> Dict[str, Any]:
     }
 
 
+@traced_node("manual_review", stage="failsafe")
 def manual_review_node(state: ClaimState) -> Dict[str, Any]:
     """Escalate to Human Claims Investigator due to poor OCR, injection, or policy exclusion."""
     case_id = state["case_id"]
@@ -516,6 +539,7 @@ def manual_review_node(state: ClaimState) -> Dict[str, Any]:
     }
 
 
+@traced_node("finalize", stage="settlement")
 def finalize_node(state: ClaimState) -> Dict[str, Any]:
     """Finalize claim in PostgreSQL and audit log following authorized human decision."""
     case_id = state["case_id"]
@@ -558,6 +582,7 @@ def finalize_node(state: ClaimState) -> Dict[str, Any]:
     }
 
 
+@traced_node("supervisor", stage="supervision")
 def supervisor_node(state: ClaimState) -> Dict[str, Any]:
     """Supervisor node recording orchestrator evaluation hop."""
     return {

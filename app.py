@@ -13,6 +13,10 @@ st.set_page_config(
 from src.db.connection import execute_query
 from src.ui.auth import get_current_user, render_auth_sidebar
 from src.ui.components import render_status_badge
+from src.utils.tracing import init_tracing
+
+# Initialize Arize Phoenix OpenTelemetry tracing
+init_tracing()
 
 # Render Auth Persona Switcher
 render_auth_sidebar()

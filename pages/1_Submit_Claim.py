@@ -11,11 +11,28 @@ from src.db.connection import execute_query
 from src.ui.auth import render_auth_sidebar
 from src.ui.components import load_seed_pack_manifest, load_seed_pack_by_id, render_status_badge
 from src.ui.engine import stream_claim_workflow
+from src.utils.tracing import init_tracing, check_phoenix_health, PHOENIX_UI_URL
+
+# Ensure OpenTelemetry tracing is initialized
+init_tracing()
 
 render_auth_sidebar()
 
 st.title("📥 Digital Claim Intake & Multi-Agent Execution")
 st.caption("Register new claims, ingest supporting documents, and trigger real-time LangGraph orchestration.")
+
+# Live Phoenix Tracing Connection Indicator
+ph_health = check_phoenix_health()
+if ph_health.get("status") == "connected":
+    st.markdown(
+        f"🟢 **Arize Phoenix Tracing Active**: [Open Phoenix Dashboard ({PHOENIX_UI_URL})]({PHOENIX_UI_URL}) to observe real-time LLM spans, token counts, and agent execution graph.",
+        help="All workflow steps, LangGraph nodes, and LLM calls are actively traced to Phoenix.",
+    )
+else:
+    st.info(
+        f"💡 **Phoenix Tracing Notice**: Container on port 6006 is not connected ({ph_health.get('status')}). "
+        f"To view live traces at [{PHOENIX_UI_URL}]({PHOENIX_UI_URL}), start the container: `docker compose up -d phoenix`."
+    )
 
 st.markdown("---")
 

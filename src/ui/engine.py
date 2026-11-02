@@ -10,8 +10,12 @@ from langgraph.types import Command
 from src.db.connection import DATABASE_URL, execute_query
 from src.orchestration.builder import build_claims_graph
 from src.orchestration.state import ClaimState
+from src.utils.tracing import init_tracing
 
 logger = logging.getLogger(__name__)
+
+# Initialize OpenTelemetry Phoenix tracing on module import
+init_tracing()
 
 
 def stream_claim_workflow(
@@ -21,6 +25,9 @@ def stream_claim_workflow(
     Stream claim processing through the LangGraph workflow.
     Yields events with the active node, updated values, and whether an HITL interrupt occurred.
     """
+    # Ensure tracing is active for this workflow execution
+    init_tracing()
+
     config = {"configurable": {"thread_id": case_id}}
     with PostgresSaver.from_conn_string(DATABASE_URL) as checkpointer:
         checkpointer.setup()
@@ -50,6 +57,7 @@ def stream_claim_workflow(
 
 def resume_claim_workflow(case_id: str, resume_payload: Any) -> Dict[str, Any]:
     """Resume execution of a paused claim via Command(resume=...)."""
+    init_tracing()
     config = {"configurable": {"thread_id": case_id}}
     with PostgresSaver.from_conn_string(DATABASE_URL) as checkpointer:
         checkpointer.setup()
