@@ -1,0 +1,358 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1520 1020" width="100%" height="100%" style="background-color: #0b1120; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+    
+    <linearGradient id="boxGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <linearGradient id="hitlGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+
+    <!-- Drop Shadows -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+
+    <!-- Arrow Markers -->
+    <marker id="arrowSky" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#c084fc"/>
+    </marker>
+    <marker id="arrowEmerald" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#fbbf24"/>
+    </marker>
+  </defs>
+
+  <!-- Background Canvas Grid Lines -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.75" stroke-opacity="0.5"/>
+  </pattern>
+  <rect width="100%" height="100%" fill="url(#grid)" />
+
+  <!-- ==================== HEADER BAR ==================== -->
+  <g transform="translate(40, 25)">
+    <text x="0" y="32" font-size="26" font-weight="800" fill="url(#headerGrad)" letter-spacing="0.5">UHG INTELLIGENT CLAIMS PROCESSING &amp; CASE MANAGEMENT</text>
+    <text x="0" y="56" font-size="14" font-weight="500" fill="#94a3b8">Multi-Agent System Architecture | LangGraph • FastMCP Protocol Layer • Human-In-The-Loop Governance</text>
+    
+    <!-- Status Badges -->
+    <g transform="translate(1080, 8)">
+      <rect x="0" y="0" width="165" height="30" rx="15" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+      <circle cx="15" cy="15" r="5" fill="#38bdf8"/>
+      <text x="28" y="20" font-size="12" font-weight="600" fill="#f8fafc">FastMCP Protocol</text>
+    </g>
+    <g transform="translate(1260, 8)">
+      <rect x="0" y="0" width="180" height="30" rx="15" fill="#1e293b" stroke="#ef4444" stroke-width="1.2"/>
+      <circle cx="15" cy="15" r="5" fill="#ef4444"/>
+      <text x="28" y="20" font-size="12" font-weight="600" fill="#f8fafc">Agents Prepare, People Decide</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- LAYER 1: PRESENTATION LAYER (Streamlit) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(40, 105)" filter="url(#shadow)">
+    <!-- Container -->
+    <rect x="0" y="0" width="1440" height="125" rx="14" fill="url(#boxGrad1)" stroke="#38bdf8" stroke-width="1.8"/>
+    <!-- Title Badge -->
+    <rect x="18" y="-12" width="280" height="25" rx="6" fill="#0284c7"/>
+    <text x="30" y="5" font-size="12" font-weight="700" fill="#ffffff" letter-spacing="0.5">1. PRESENTATION LAYER (STREAMLIT MULTIPAGE)</text>
+
+    <!-- Cards inside UI -->
+    <!-- Card 1 -->
+    <g transform="translate(25, 25)">
+      <rect x="0" y="0" width="250" height="80" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.2"/>
+      <text x="14" y="24" font-size="13" font-weight="700" fill="#38bdf8">1_Submit_Claim.py</text>
+      <text x="14" y="44" font-size="11" fill="#cbd5e1">• Drag-and-drop claim documents</text>
+      <text x="14" y="60" font-size="11" fill="#94a3b8">• Metadata capture &amp; thread creation</text>
+    </g>
+
+    <!-- Card 2 -->
+    <g transform="translate(305, 25)">
+      <rect x="0" y="0" width="250" height="80" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.2"/>
+      <text x="14" y="24" font-size="13" font-weight="700" fill="#38bdf8">2_Case_Queue.py</text>
+      <text x="14" y="44" font-size="11" fill="#cbd5e1">• Filter active cases by status</text>
+      <text x="14" y="60" font-size="11" fill="#94a3b8">• Real-time SLA breach countdowns</text>
+    </g>
+
+    <!-- Card 3 -->
+    <g transform="translate(585, 25)">
+      <rect x="0" y="0" width="265" height="80" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.2"/>
+      <text x="14" y="24" font-size="13" font-weight="700" fill="#38bdf8">3_Case_Workspace.py</text>
+      <text x="14" y="44" font-size="11" fill="#cbd5e1">• Live graph streaming timeline</text>
+      <text x="14" y="60" font-size="11" fill="#94a3b8">• OCR results, citations &amp; audit view</text>
+    </g>
+
+    <!-- Card 4 (HITL Approver) -->
+    <g transform="translate(880, 25)">
+      <rect x="0" y="0" width="265" height="80" rx="10" fill="#1e1b4b" stroke="#f43f5e" stroke-width="1.5"/>
+      <text x="14" y="24" font-size="13" font-weight="700" fill="#fb7185">4_Approver_Portal.py [HITL]</text>
+      <text x="14" y="44" font-size="11" fill="#fecdd3">• Role &amp; Limit Tier verification</text>
+      <text x="14" y="60" font-size="11" fill="#fda4af">• Command(resume) Approve / Reject</text>
+    </g>
+
+    <!-- Card 5 -->
+    <g transform="translate(1175, 25)">
+      <rect x="0" y="0" width="240" height="80" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.2"/>
+      <text x="14" y="24" font-size="13" font-weight="700" fill="#38bdf8">5_Ask_Supervisor.py</text>
+      <text x="14" y="44" font-size="11" fill="#cbd5e1">• Conversational Q&amp;A over cases</text>
+      <text x="14" y="60" font-size="11" fill="#94a3b8">• Direct case:// URI inspection</text>
+    </g>
+  </g>
+
+  <!-- Flow Arrow from UI to Orchestration -->
+  <path d="M 165 230 L 165 265" stroke="#38bdf8" stroke-width="2.2" fill="none" marker-end="url(#arrowSky)"/>
+  <path d="M 1010 265 L 1010 230" stroke="#f43f5e" stroke-width="2.2" fill="none" marker-end="url(#arrowSky)"/>
+  <text x="1020" y="252" font-size="10.5" font-weight="600" fill="#fb7185">Command(resume)</text>
+
+  <!-- ========================================================================= -->
+  <!-- LAYER 2: ORCHESTRATION LAYER (LangGraph) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(40, 270)" filter="url(#shadow)">
+    <!-- Container -->
+    <rect x="0" y="0" width="1440" height="150" rx="14" fill="url(#boxGrad1)" stroke="#a855f7" stroke-width="1.8"/>
+    <!-- Title Badge -->
+    <rect x="18" y="-12" width="310" height="25" rx="6" fill="#7e22ce"/>
+    <text x="30" y="5" font-size="12" font-weight="700" fill="#ffffff" letter-spacing="0.5">2. ORCHESTRATION LAYER (LANGGRAPH STATE MACHINE)</text>
+
+    <!-- Node 1: Supervisor Router -->
+    <g transform="translate(25, 28)">
+      <rect x="0" y="0" width="250" height="98" rx="10" fill="#0f172a" stroke="#a855f7" stroke-width="1.4"/>
+      <text x="14" y="26" font-size="14" font-weight="700" fill="#c084fc">Supervisor Router</text>
+      <text x="14" y="48" font-size="11" fill="#e2e8f0">• route_next_step() evaluation</text>
+      <text x="14" y="66" font-size="11" fill="#cbd5e1">• Deterministic Guardrail Gates</text>
+      <text x="14" y="84" font-size="11" fill="#94a3b8">• 5-6 LLM Call Strict Budget</text>
+    </g>
+
+    <!-- Node 2: Send Fan-Out Node -->
+    <g transform="translate(305, 28)">
+      <rect x="0" y="0" width="250" height="98" rx="10" fill="#0f172a" stroke="#a855f7" stroke-width="1.2"/>
+      <text x="14" y="26" font-size="14" font-weight="700" fill="#c084fc">Send Fan-Out Node</text>
+      <text x="14" y="48" font-size="11" fill="#e2e8f0">• LangGraph Send() dispatch</text>
+      <text x="14" y="66" font-size="11" fill="#cbd5e1">• Parallel doc extraction workers</text>
+      <text x="14" y="84" font-size="11" fill="#94a3b8">• document_join aggregation</text>
+    </g>
+
+    <!-- Node 3: Checkpointer -->
+    <g transform="translate(585, 28)">
+      <rect x="0" y="0" width="265" height="98" rx="10" fill="#0f172a" stroke="#a855f7" stroke-width="1.2"/>
+      <text x="14" y="26" font-size="14" font-weight="700" fill="#c084fc">Checkpointer Engine</text>
+      <text x="14" y="48" font-size="11" fill="#e2e8f0">• thread_id = case_id</text>
+      <text x="14" y="66" font-size="11" fill="#cbd5e1">• PostgresSaver / SqliteSaver</text>
+      <text x="14" y="84" font-size="11" fill="#94a3b8">• Crash survival &amp; time-travel replay</text>
+    </g>
+
+    <!-- Node 4: HITL Pause Gate (CRITICAL) -->
+    <g transform="translate(880, 28)">
+      <rect x="0" y="0" width="265" height="98" rx="10" fill="url(#hitlGrad)" stroke="#fca5a5" stroke-width="1.6"/>
+      <text x="14" y="26" font-size="14" font-weight="800" fill="#ffffff">interrupt() Pause Gate</text>
+      <text x="14" y="48" font-size="11" font-weight="600" fill="#fee2e2">• AWAITING_HUMAN_DECISION</text>
+      <text x="14" y="66" font-size="11" fill="#ffffff">• Awaiting Missing Documentation</text>
+      <text x="14" y="84" font-size="11" font-weight="700" fill="#fef08a">GOLDEN RULE: No AI Settlement</text>
+    </g>
+
+    <!-- Node 5: Trace Span Node -->
+    <g transform="translate(1175, 28)">
+      <rect x="0" y="0" width="240" height="98" rx="10" fill="#0f172a" stroke="#a855f7" stroke-width="1.2"/>
+      <text x="14" y="26" font-size="14" font-weight="700" fill="#c084fc">Observability Hook</text>
+      <text x="14" y="48" font-size="11" fill="#e2e8f0">• @traced_node wrapper</text>
+      <text x="14" y="66" font-size="11" fill="#cbd5e1">• Arize Phoenix OpenInference</text>
+      <text x="14" y="84" font-size="11" fill="#94a3b8">• Intercepts HITL as OK status</text>
+    </g>
+  </g>
+
+  <!-- Flow Arrow from Orchestration to Agents -->
+  <path d="M 760 420 L 760 455" stroke="#a855f7" stroke-width="2.2" fill="none" marker-end="url(#arrowPurple)"/>
+
+  <!-- ========================================================================= -->
+  <!-- LAYER 3: SPECIALIST AGENTS & MIDDLEWARE -->
+  <!-- ========================================================================= -->
+  <g transform="translate(40, 460)" filter="url(#shadow)">
+    <!-- Container -->
+    <rect x="0" y="0" width="1440" height="175" rx="14" fill="url(#boxGrad1)" stroke="#10b981" stroke-width="1.8"/>
+    <!-- Title Badge -->
+    <rect x="18" y="-12" width="340" height="25" rx="6" fill="#059669"/>
+    <text x="30" y="5" font-size="12" font-weight="700" fill="#ffffff" letter-spacing="0.5">3. SPECIALIST AGENTS &amp; DEFENSE MIDDLEWARE</text>
+
+    <!-- Sub-Box: Middleware Stack -->
+    <g transform="translate(25, 24)">
+      <rect x="0" y="0" width="320" height="132" rx="10" fill="#064e3b" stroke="#34d399" stroke-width="1.4" stroke-dasharray="4 2"/>
+      <text x="14" y="22" font-size="13" font-weight="800" fill="#a7f3d0">Middleware Interceptor Stack</text>
+      <text x="14" y="42" font-size="11" fill="#ecfdf5">• PIIMiddleware: Pre-LLM scrubbing (SSN/Phone/Email)</text>
+      <text x="14" y="60" font-size="11" fill="#ecfdf5">• ToolCallLimitMiddleware: 6-8 tool calls cap</text>
+      <text x="14" y="78" font-size="11" fill="#ecfdf5">• ToolRetryMiddleware: Exponential backoff + jitter</text>
+      <text x="14" y="104" font-size="11" font-weight="700" fill="#6ee7b7">Guarantees 0 PII Leakage &amp; No Runaway Loops</text>
+    </g>
+
+    <!-- Specialists List -->
+    <!-- Agent 1: Intake -->
+    <g transform="translate(365, 24)">
+      <rect x="0" y="0" width="200" height="132" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="1.2"/>
+      <text x="12" y="24" font-size="13" font-weight="700" fill="#34d399">IntakeAgent</text>
+      <text x="12" y="44" font-size="10.5" fill="#e2e8f0">• Policy coverage check</text>
+      <text x="12" y="62" font-size="10.5" fill="#e2e8f0">• Duplicate detection</text>
+      <text x="12" y="80" font-size="10.5" fill="#94a3b8">• Small LLM (1 call)</text>
+      <rect x="10" y="98" width="180" height="22" rx="4" fill="#134e4a"/>
+      <text x="16" y="113" font-size="9.5" font-weight="600" fill="#5eead4">policy-mcp | case-mcp</text>
+    </g>
+
+    <!-- Agent 2: Document -->
+    <g transform="translate(580, 24)">
+      <rect x="0" y="0" width="215" height="132" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="1.2"/>
+      <text x="12" y="24" font-size="13" font-weight="700" fill="#34d399">DocumentAgent</text>
+      <text x="12" y="44" font-size="10.5" fill="#e2e8f0">• OCR Text Extraction</text>
+      <text x="12" y="62" font-size="10.5" fill="#e2e8f0">• 1 Unified Pydantic Call</text>
+      <text x="12" y="80" font-size="10.5" fill="#94a3b8">• Classify + Fields + Injection</text>
+      <rect x="10" y="98" width="195" height="22" rx="4" fill="#134e4a"/>
+      <text x="16" y="113" font-size="9.5" font-weight="600" fill="#5eead4">documents-mcp</text>
+    </g>
+
+    <!-- Agent 3: Summary -->
+    <g transform="translate(810, 24)">
+      <rect x="0" y="0" width="210" height="132" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="1.2"/>
+      <text x="12" y="24" font-size="13" font-weight="700" fill="#34d399">SummaryAgent</text>
+      <text x="12" y="44" font-size="10.5" fill="#e2e8f0">• Facts &amp; Evidence synthesis</text>
+      <text x="12" y="62" font-size="10.5" fill="#e2e8f0">• pgvector semantic clause RAG</text>
+      <text x="12" y="80" font-size="10.5" fill="#94a3b8">• Mid-size LLM (1 call)</text>
+      <rect x="10" y="98" width="190" height="22" rx="4" fill="#134e4a"/>
+      <text x="16" y="113" font-size="9.5" font-weight="600" fill="#5eead4">case | docs | policy-mcp</text>
+    </g>
+
+    <!-- Agent 4: Routing -->
+    <g transform="translate(1035, 24)">
+      <rect x="0" y="0" width="190" height="132" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="1.2"/>
+      <text x="12" y="24" font-size="13" font-weight="700" fill="#34d399">RoutingAgent</text>
+      <text x="12" y="44" font-size="10.5" fill="#e2e8f0">• Staff workload balancing</text>
+      <text x="12" y="62" font-size="10.5" fill="#e2e8f0">• Approver tier matching</text>
+      <text x="12" y="80" font-size="10.5" fill="#94a3b8">• Deterministic / 1 call</text>
+      <rect x="10" y="98" width="170" height="22" rx="4" fill="#134e4a"/>
+      <text x="16" y="113" font-size="9.5" font-weight="600" fill="#5eead4">workflow-mcp</text>
+    </g>
+
+    <!-- Agent 5: SLA & Comms -->
+    <g transform="translate(1240, 24)">
+      <rect x="0" y="0" width="180" height="132" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="1.2"/>
+      <text x="12" y="24" font-size="13" font-weight="700" fill="#34d399">SLAAgent</text>
+      <text x="12" y="44" font-size="10.5" fill="#e2e8f0">• SLA schedule &amp; timer</text>
+      <text x="12" y="62" font-size="10.5" fill="#e2e8f0">• Missing docs letter</text>
+      <text x="12" y="80" font-size="10.5" fill="#94a3b8">• FastMCP prompt fill</text>
+      <rect x="10" y="98" width="160" height="22" rx="4" fill="#134e4a"/>
+      <text x="16" y="113" font-size="9.5" font-weight="600" fill="#5eead4">workflow-mcp</text>
+    </g>
+  </g>
+
+  <!-- Flow Arrow from Agents to MCP -->
+  <path d="M 760 635 L 760 670" stroke="#10b981" stroke-width="2.2" fill="none" marker-end="url(#arrowEmerald)"/>
+  <text x="770" y="655" font-size="10.5" font-weight="600" fill="#6ee7b7">tool_loader.py (Least Privilege Bridge)</text>
+
+  <!-- ========================================================================= -->
+  <!-- LAYER 4: FASTMCP PROTOCOL LAYER -->
+  <!-- ========================================================================= -->
+  <g transform="translate(40, 675)" filter="url(#shadow)">
+    <!-- Container -->
+    <rect x="0" y="0" width="1440" height="150" rx="14" fill="url(#boxGrad1)" stroke="#f59e0b" stroke-width="1.8"/>
+    <!-- Title Badge -->
+    <rect x="18" y="-12" width="370" height="25" rx="6" fill="#d97706"/>
+    <text x="30" y="5" font-size="12" font-weight="700" fill="#ffffff" letter-spacing="0.5">4. PROTOCOL LAYER (4 FASTMCP MICRO-SERVERS)</text>
+
+    <!-- Server 1: case-mcp -->
+    <g transform="translate(25, 26)">
+      <rect x="0" y="0" width="325" height="104" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="1.2"/>
+      <text x="14" y="24" font-size="14" font-weight="800" fill="#fbbf24">case-mcp</text>
+      <text x="14" y="46" font-size="10.5" fill="#e2e8f0"><tspan font-weight="700" fill="#fde68a">Tools:</tspan> get_case, list_cases, find_similar_cases,</text>
+      <text x="14" y="62" font-size="10.5" fill="#e2e8f0">register_case, save_summary</text>
+      <text x="14" y="80" font-size="10.5" fill="#94a3b8"><tspan font-weight="700" fill="#cbd5e1">Resources:</tspan> case://{id}, case://{id}/timeline</text>
+      <text x="14" y="96" font-size="10.5" fill="#94a3b8"><tspan font-weight="700" fill="#cbd5e1">Prompt:</tspan> case_summary</text>
+    </g>
+
+    <!-- Server 2: policy-mcp -->
+    <g transform="translate(375, 26)">
+      <rect x="0" y="0" width="335" height="104" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="1.2"/>
+      <text x="14" y="24" font-size="14" font-weight="800" fill="#fbbf24">policy-mcp</text>
+      <text x="14" y="46" font-size="10.5" fill="#e2e8f0"><tspan font-weight="700" fill="#fde68a">Tools:</tspan> get_policy, check_coverage,</text>
+      <text x="14" y="62" font-size="10.5" fill="#e2e8f0">search_policy_wording (pgvector cosine RAG)</text>
+      <text x="14" y="80" font-size="10.5" fill="#94a3b8"><tspan font-weight="700" fill="#cbd5e1">Resources:</tspan> policy://{number}</text>
+      <text x="14" y="96" font-size="10.5" fill="#94a3b8"><tspan font-weight="700" fill="#cbd5e1">Precision:</tspan> Clause-aware semantic chunking</text>
+    </g>
+
+    <!-- Server 3: documents-mcp -->
+    <g transform="translate(735, 26)">
+      <rect x="0" y="0" width="335" height="104" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="1.2"/>
+      <text x="14" y="24" font-size="14" font-weight="800" fill="#fbbf24">documents-mcp</text>
+      <text x="14" y="46" font-size="10.5" fill="#e2e8f0"><tspan font-weight="700" fill="#fde68a">Tools:</tspan> list_documents, extract_text,</text>
+      <text x="14" y="62" font-size="10.5" fill="#e2e8f0">classify_document, validate_case_documents</text>
+      <text x="14" y="80" font-size="10.5" fill="#94a3b8"><tspan font-weight="700" fill="#cbd5e1">Resources:</tspan> document://{case_id}/{doc_id}</text>
+      <text x="14" y="96" font-size="10.5" fill="#94a3b8"><tspan font-weight="700" fill="#cbd5e1">Features:</tspan> OCR Confidence &amp; Injection Flagging</text>
+    </g>
+
+    <!-- Server 4: workflow-mcp -->
+    <g transform="translate(1095, 26)">
+      <rect x="0" y="0" width="320" height="104" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="1.2"/>
+      <text x="14" y="24" font-size="14" font-weight="800" fill="#fbbf24">workflow-mcp</text>
+      <text x="14" y="46" font-size="10.5" fill="#e2e8f0"><tspan font-weight="700" fill="#fde68a">Tools:</tspan> get_workload, assign_case,</text>
+      <text x="14" y="62" font-size="10.5" fill="#e2e8f0">request_approval, schedule_sla, request_documents</text>
+      <text x="14" y="80" font-size="10.5" fill="#94a3b8"><tspan font-weight="700" fill="#cbd5e1">Prompts:</tspan> claimant_letter, approver_brief</text>
+      <text x="14" y="96" font-size="10.5" fill="#f87171"><tspan font-weight="700">Governance:</tspan> ZERO approve / reject tools</text>
+    </g>
+  </g>
+
+  <!-- Flow Arrow from MCP to Persistence Layer -->
+  <path d="M 760 825 L 760 860" stroke="#f59e0b" stroke-width="2.2" fill="none" marker-end="url(#arrowAmber)"/>
+
+  <!-- ========================================================================= -->
+  <!-- LAYER 5: PERSISTENCE, OBSERVABILITY & EXTERNAL SERVICES -->
+  <!-- ========================================================================= -->
+  <g transform="translate(40, 865)" filter="url(#shadow)">
+    <!-- Container -->
+    <rect x="0" y="0" width="1440" height="120" rx="14" fill="url(#boxGrad1)" stroke="#ec4899" stroke-width="1.8"/>
+    <!-- Title Badge -->
+    <rect x="18" y="-12" width="410" height="25" rx="6" fill="#db2777"/>
+    <text x="30" y="5" font-size="12" font-weight="700" fill="#ffffff" letter-spacing="0.5">5. PERSISTENCE, OBSERVABILITY &amp; INTEGRATIONS</text>
+
+    <!-- Service 1: PostgreSQL 16 + pgvector -->
+    <g transform="translate(25, 22)">
+      <rect x="0" y="0" width="410" height="78" rx="10" fill="#0f172a" stroke="#ec4899" stroke-width="1.2"/>
+      <text x="16" y="24" font-size="13" font-weight="800" fill="#f472b6">PostgreSQL 16 + pgvector</text>
+      <text x="16" y="44" font-size="11" fill="#cbd5e1">• Host bind-mount persistence (./data/postgres_data)</text>
+      <text x="16" y="62" font-size="11" fill="#94a3b8">• Tables: cases, case_documents, policies, policy_clauses</text>
+    </g>
+
+    <!-- Service 2: Append-Only Audit Trail -->
+    <g transform="translate(460, 22)">
+      <rect x="0" y="0" width="310" height="78" rx="10" fill="#0f172a" stroke="#ec4899" stroke-width="1.2"/>
+      <text x="16" y="24" font-size="13" font-weight="800" fill="#f472b6">case_timeline_audit</text>
+      <text x="16" y="44" font-size="11" fill="#cbd5e1">• Append-only mutation event log</text>
+      <text x="16" y="62" font-size="11" fill="#94a3b8">• Actor, action, before_state, after_state</text>
+    </g>
+
+    <!-- Service 3: Arize Phoenix Observability -->
+    <g transform="translate(795, 22)">
+      <rect x="0" y="0" width="345" height="78" rx="10" fill="#0f172a" stroke="#ec4899" stroke-width="1.2"/>
+      <text x="16" y="24" font-size="13" font-weight="800" fill="#f472b6">Arize Phoenix Tracing (Port 6006)</text>
+      <text x="16" y="44" font-size="11" fill="#cbd5e1">• OpenTelemetry / OpenInference integration</text>
+      <text x="16" y="62" font-size="11" fill="#94a3b8">• Token usage, latency p95, cost &amp; HITL status</text>
+    </g>
+
+    <!-- Service 4: Mailpit Mock SMTP -->
+    <g transform="translate(1165, 22)">
+      <rect x="0" y="0" width="250" height="78" rx="10" fill="#0f172a" stroke="#ec4899" stroke-width="1.2"/>
+      <text x="16" y="24" font-size="13" font-weight="800" fill="#f472b6">Mailpit SMTP (1025/8025)</text>
+      <text x="16" y="44" font-size="11" fill="#cbd5e1">• Missing docs claimant letters</text>
+      <text x="16" y="62" font-size="11" fill="#94a3b8">• SLA escalation notifications</text>
+    </g>
+  </g>
+</svg>
+

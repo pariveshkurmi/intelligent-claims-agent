@@ -11,6 +11,8 @@ __pycache__/
 
 # PostgreSQL persistent mount
 data/postgres_data/
+data/test_scenarios/
+.agents/
 
 # Environment files
 .env

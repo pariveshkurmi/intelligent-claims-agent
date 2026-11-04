@@ -3,6 +3,11 @@
 **Author:** FDE Capstone Team  
 **Scope:** Multi-agent orchestration, MCP server protocol layer, human-in-the-loop gating, and persistence.
 
+> [!NOTE]
+> For the comprehensive visual high-level architecture diagram and SVG graphic, see:
+> - Markdown & Sequence Flows: [high_level_architecture.md](file:///c:/Users/pariv/Projects/Claim-Insurance-Agent/docs/high_level_architecture.md)
+> - Vector Graphic (SVG): [high_level_architecture.svg](file:///c:/Users/pariv/Projects/Claim-Insurance-Agent/docs/high_level_architecture.svg)
+
 ---
 
 ## 1. End-to-End System Architecture
